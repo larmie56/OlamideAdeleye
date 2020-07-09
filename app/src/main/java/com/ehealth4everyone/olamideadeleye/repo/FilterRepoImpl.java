@@ -17,12 +17,18 @@ import java.util.List;
 
 public class FilterRepoImpl implements FilterRepo {
 
+    Context mContext;
+
+    public FilterRepoImpl(Context context) {
+        mContext = context;
+    }
+
     @Override
-    public String getJsonStringFromAsset(Context context) {
+    public String getJsonStringFromAsset() {
         String json;
 
         try {
-            InputStream inputStream = context.getAssets().open("filter.json");
+            InputStream inputStream = mContext.getAssets().open("filter.json");
             int size = inputStream.available();
             byte[] buffer = new byte[size];
             inputStream.read(buffer);

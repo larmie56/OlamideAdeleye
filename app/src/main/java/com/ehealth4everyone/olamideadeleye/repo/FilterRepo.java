@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface FilterRepo {
 
-    String getJsonStringFromAsset(Context context);
+    String getJsonStringFromAsset();
     List<Filter> getFiltersFromJsonString(String string);
 }
