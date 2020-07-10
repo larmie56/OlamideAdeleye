@@ -33,4 +33,10 @@ dependencies {
     //gradle dependency for opencsv
     implementation 'com.opencsv:opencsv:4.6'
 
+    def lifecycle_version = "2.2.0"
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+
 }
