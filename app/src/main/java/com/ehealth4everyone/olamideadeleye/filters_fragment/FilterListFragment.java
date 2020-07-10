@@ -23,11 +23,17 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class FilterListFragment extends Fragment {
+    public String TAG = this.getClass().getSimpleName();
+
+    private static FilterListFragment INSTANCE;
+
     @Inject
     FilterRepo mFilterRepo;
 
     FragmentFilterListBinding mFilterListBinding;
     FiltersViewModel mFiltersViewModel;
+
+    private FilterListFragment() {}
 
     @Nullable
     @Override
@@ -52,5 +58,12 @@ public class FilterListFragment extends Fragment {
                 Toast.makeText(getActivity(), filters.toString(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public static FilterListFragment getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new FilterListFragment();
+
+        return INSTANCE;
     }
 }
