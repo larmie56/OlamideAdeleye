@@ -6,8 +6,10 @@ import com.ehealth4everyone.olamideadeleye.filter_model.Filter;
 
 import java.util.List;
 
+import io.reactivex.Single;
+
 public interface FilterRepo {
 
     String getJsonStringFromAsset();
-    List<Filter> getFiltersFromJsonString(String string);
+    Single<List<Filter>> getFiltersFromJsonString(String string);
 }

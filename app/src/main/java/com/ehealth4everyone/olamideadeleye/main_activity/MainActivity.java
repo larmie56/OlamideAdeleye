@@ -7,12 +7,12 @@ import android.os.Bundle;
 
 import com.ehealth4everyone.olamideadeleye.App;
 import com.ehealth4everyone.olamideadeleye.R;
+import com.ehealth4everyone.olamideadeleye.car_owners_fragment.CarOwnerFragment;
 import com.ehealth4everyone.olamideadeleye.di.AppComponent;
+import com.ehealth4everyone.olamideadeleye.filters_fragment.FilterItemClickHandler;
 import com.ehealth4everyone.olamideadeleye.filters_fragment.FilterListFragment;
 
-public class MainActivity extends AppCompatActivity {
-
-    private FilterListFragment mFilterListFragment;
+public class MainActivity extends AppCompatActivity implements FilterItemClickHandler {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +28,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void openFilterListFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        mFilterListFragment = FilterListFragment.getInstance();
-        fragmentTransaction.add(R.id.fragment_container, mFilterListFragment, mFilterListFragment.TAG);
+        FilterListFragment filterListFragment = new FilterListFragment();
+        fragmentTransaction.add(R.id.fragment_container, filterListFragment, filterListFragment.TAG);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void openCarOwnerFragment(Bundle bundle) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        CarOwnerFragment carOwnerFragment = new CarOwnerFragment();
+        carOwnerFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragment_container, carOwnerFragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 }
