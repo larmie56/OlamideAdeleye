@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ehealth4everyone.olamideadeleye.App;
 import com.ehealth4everyone.olamideadeleye.databinding.FragmentFilterListBinding;
@@ -27,13 +29,13 @@ public class FilterListFragment extends Fragment {
 
     private static FilterListFragment INSTANCE;
 
-    @Inject
-    FilterRepo mFilterRepo;
+    @Inject FilterRepo mFilterRepo;
+    @Inject FilterListAdapter mFilterListAdapter;
 
     FragmentFilterListBinding mFilterListBinding;
     FiltersViewModel mFiltersViewModel;
+    private RecyclerView mRecyclerView;
 
-    private FilterListFragment() {}
 
     @Nullable
     @Override
@@ -50,12 +52,18 @@ public class FilterListFragment extends Fragment {
         AppComponent appComponent = ((App) getActivity().getApplication()).mAppComponent;
         appComponent.plusFilterListFragment().injectFilterListFragment(this);
 
+        mRecyclerView = mFilterListBinding.filterListRv;
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+
+
         FiltersViewModelFactory factory = new FiltersViewModelFactory(mFilterRepo);
         mFiltersViewModel = new ViewModelProvider(this, factory).get(FiltersViewModel.class);
         mFiltersViewModel.getFiltersLiveData().observe(this, new Observer<List<Filter>>() {
             @Override
             public void onChanged(List<Filter> filters) {
-                Toast.makeText(getActivity(), filters.toString(), Toast.LENGTH_LONG).show();
+                mFilterListAdapter.setItems(filters);
+                mRecyclerView.setAdapter(mFilterListAdapter);
             }
         });
     }

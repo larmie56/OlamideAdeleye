@@ -12,6 +12,8 @@ import com.ehealth4everyone.olamideadeleye.filters_fragment.FilterListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private FilterListFragment mFilterListFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void openFilterListFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        FilterListFragment filterListFragment = FilterListFragment.getInstance();
-        fragmentTransaction.add(R.id.fragment_container, filterListFragment, filterListFragment.TAG);
+        mFilterListFragment = FilterListFragment.getInstance();
+        fragmentTransaction.add(R.id.fragment_container, mFilterListFragment, mFilterListFragment.TAG);
         fragmentTransaction.commit();
     }
 }
