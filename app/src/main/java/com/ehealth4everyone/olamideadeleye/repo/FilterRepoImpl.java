@@ -17,6 +17,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Single;
+
 public class FilterRepoImpl implements FilterRepo {
 
     Context mContext;
@@ -46,12 +48,11 @@ public class FilterRepoImpl implements FilterRepo {
     }
 
     @Override
-    public List<Filter> getFiltersFromJsonString(String string) {
-        List<Filter> filters = null;
+    public Single<List<Filter>> getFiltersFromJsonString(String string) {
+        List<Filter> filters = new ArrayList<>();
 
         try {
             JSONArray jsonFilterArray = new JSONArray(string);
-            filters = new ArrayList<>();
             Filter filter;
 
             for (int filterIndex = 0; filterIndex < jsonFilterArray.length(); filterIndex++) {
@@ -73,7 +74,7 @@ public class FilterRepoImpl implements FilterRepo {
             e.printStackTrace();
         }
 
-        return filters;
+        return Single.just(filters);
     }
 
     private List<String> getCountries(JSONObject jsonObjectFilter) {
