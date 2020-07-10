@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class FilterListFragemt extends Fragment {
+public class FilterListFragment extends Fragment {
     @Inject
     FilterRepo mFilterRepo;
 

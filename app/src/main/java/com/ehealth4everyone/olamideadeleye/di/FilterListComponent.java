@@ -1,6 +1,6 @@
 package com.ehealth4everyone.olamideadeleye.di;
 
-import com.ehealth4everyone.olamideadeleye.filters_fragment.FilterListFragemt;
+import com.ehealth4everyone.olamideadeleye.filters_fragment.FilterListFragment;
 
 import dagger.Subcomponent;
 
@@ -8,5 +8,5 @@ import dagger.Subcomponent;
 @Subcomponent(modules = FilterListBinder.class)
 public interface FilterListComponent {
 
-    void injectFilterListFragment(FilterListFragemt filterListFragemt);
+    void injectFilterListFragment(FilterListFragment filterListFragment);
 }
