@@ -1,7 +1,9 @@
 package com.ehealth4everyone.olamideadeleye.filters_fragment;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -19,22 +21,33 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
     FilterItemListBinding mBinding;
     LayoutInflater mInflater;
     List<Filter> mFilters;
+    FilterItemClickHandler mClickHandler;
 
-    @Inject
-    public FilterListAdapter(Context context) {
+    public FilterListAdapter(Context context, FilterItemClickHandler clickHandler) {
         mInflater = LayoutInflater.from(context);
+        mClickHandler = clickHandler;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mBinding = FilterItemListBinding.inflate(mInflater, parent, false);
-        return new ViewHolder(mBinding);
+        return new ViewHolder(mBinding, mClickHandler);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(mFilters, position);
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        final Filter filter = mFilters.get(position);
+        holder.bind(filter);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(Filter.TAG, filter);
+                holder.handleOnClick(bundle);
+            }
+        });
     }
 
     @Override
@@ -48,20 +61,24 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         FilterItemListBinding mBinding;
+        FilterItemClickHandler mClickHandler;
 
-        public ViewHolder(FilterItemListBinding binding) {
+        public ViewHolder(FilterItemListBinding binding, FilterItemClickHandler clickHandler) {
             super(binding.getRoot());
             mBinding = binding;
+            mClickHandler = clickHandler;
         }
 
-        void bind(List<Filter> filters, int position) {
-            Filter filter = filters.get(position);
-
+        void bind(Filter filter) {
             this.mBinding.tvDateRange.setText(StringUtil
                     .formatDateRange(filter.getStartYear(), filter.getEndYear()));
             this.mBinding.tvGender.setText(StringUtil.formatGender(filter.getGender()));
             this.mBinding.tvCountries.setText(StringUtil.formatCountries(filter.getCountries()));
             this.mBinding.tvColor.setText(StringUtil.formatColors(filter.getColors()));
+        }
+
+        public void handleOnClick(Bundle bundle) {
+            this.mClickHandler.openCarOwnerFragment(bundle);
         }
     }
 }

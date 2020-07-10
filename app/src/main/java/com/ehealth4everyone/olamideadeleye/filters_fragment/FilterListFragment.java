@@ -26,10 +26,8 @@ import javax.inject.Inject;
 public class FilterListFragment extends Fragment {
     public String TAG = this.getClass().getSimpleName();
 
-    private static FilterListFragment INSTANCE;
-
     @Inject FilterRepo mFilterRepo;
-    @Inject FilterListAdapter mFilterListAdapter;
+    FilterListAdapter mFilterListAdapter;
 
     FragmentFilterListBinding mFilterListBinding;
     FiltersViewModel mFiltersViewModel;
@@ -52,6 +50,7 @@ public class FilterListFragment extends Fragment {
         appComponent.plusFilterListFragment().injectFilterListFragment(this);
 
         mRecyclerView = mFilterListBinding.filterListRv;
+        mFilterListAdapter = new FilterListAdapter(getActivity(), (FilterItemClickHandler) getActivity());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
@@ -65,12 +64,5 @@ public class FilterListFragment extends Fragment {
                 mRecyclerView.setAdapter(mFilterListAdapter);
             }
         });
-    }
-
-    public static FilterListFragment getInstance() {
-        if (INSTANCE == null)
-            INSTANCE = new FilterListFragment();
-
-        return INSTANCE;
     }
 }

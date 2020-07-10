@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.ehealth4everyone.olamideadeleye.App;
 import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
 import com.ehealth4everyone.olamideadeleye.databinding.FragmentCarOwnerBinding;
+import com.ehealth4everyone.olamideadeleye.filter_model.Filter;
 import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepo;
 
 import java.util.List;
@@ -22,6 +23,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class CarOwnerFragment extends Fragment {
+
+    public String TAG = this.getClass().getSimpleName();
 
     @Inject CarOwnerRepo mCarOwnerRepo;
     FragmentCarOwnerBinding mBinding;
@@ -35,18 +38,22 @@ public class CarOwnerFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        App app = (App) getActivity().getApplication();
-        app.mAppComponent.plusCarOWnerFragment().injectCarOwnerFragment(this);
+        final Bundle bundle = getArguments();
+        if (bundle != null) {
+            final Filter filter = bundle.getParcelable(Filter.TAG);
+            App app = (App) getActivity().getApplication();
+            app.mAppComponent.plusCarOwnerFragment().injectCarOwnerFragment(this);
 
-        CarOwnerViewModelFactory factory = new CarOwnerViewModelFactory(mCarOwnerRepo);
-        CarOwnerViewModel carOwnerViewModel = new ViewModelProvider(this, factory)
-                .get(CarOwnerViewModel.class);
+            CarOwnerViewModelFactory factory = new CarOwnerViewModelFactory(mCarOwnerRepo);
+            CarOwnerViewModel carOwnerViewModel = new ViewModelProvider(this, factory)
+                    .get(CarOwnerViewModel.class);
 
-        carOwnerViewModel.mCarOwnersLiveData.observe(this, new Observer<List<CarOwner>>() {
-            @Override
-            public void onChanged(List<CarOwner> carOwners) {
-                Toast.makeText(getActivity(), carOwners.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
+            carOwnerViewModel.mCarOwnersLiveData.observe(this, new Observer<List<CarOwner>>() {
+                @Override
+                public void onChanged(List<CarOwner> carOwners) {
+                    Toast.makeText(getActivity(), filter.toString(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 }

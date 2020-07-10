@@ -1,8 +1,13 @@
 package com.ehealth4everyone.olamideadeleye.filter_model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class Filter {
+public class Filter implements Parcelable {
+
+    public static String TAG = "Filter";
 
     private int id;
     private int startYear;
@@ -19,6 +24,27 @@ public class Filter {
         this.countries = countries;
         this.colors = colors;
     }
+
+    protected Filter(Parcel in) {
+        id = in.readInt();
+        startYear = in.readInt();
+        endYear = in.readInt();
+        gender = in.readString();
+        countries = in.createStringArrayList();
+        colors = in.createStringArrayList();
+    }
+
+    public static final Creator<Filter> CREATOR = new Creator<Filter>() {
+        @Override
+        public Filter createFromParcel(Parcel in) {
+            return new Filter(in);
+        }
+
+        @Override
+        public Filter[] newArray(int size) {
+            return new Filter[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -42,5 +68,20 @@ public class Filter {
 
     public List<String> getColors() {
         return colors;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeInt(startYear);
+        parcel.writeInt(endYear);
+        parcel.writeString(gender);
+        parcel.writeStringList(countries);
+        parcel.writeStringList(colors);
     }
 }
