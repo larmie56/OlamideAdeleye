@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -23,28 +24,44 @@ public class CarOwnerViewModel extends ViewModel {
     private MutableLiveData<List<CarOwner>> mCarOwnersMutableLiveData = new MutableLiveData<>();
     public LiveData<List<CarOwner>> mCarOwnersLiveData = mCarOwnersMutableLiveData;
     private Disposable mDisposable;
+    private MutableLiveData<Boolean> loadStateMutableLiveData = new MutableLiveData<>();
+    public LiveData<Boolean> loadStateLiveData = loadStateMutableLiveData;
 
     @Inject
     public CarOwnerViewModel(CarOwnerRepo carOwnerRepo) {
         mCarOwnerRepo = carOwnerRepo;
-        getCarOwnersList();
     }
 
-    private void getCarOwnersList() {
-        Single<List<CarOwner>> carOwners = mCarOwnerRepo.readCarOwnerData();
-        mDisposable = carOwners.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<CarOwner>>() {
-                    @Override
-                    public void accept(List<CarOwner> carOwners) throws Exception {
-                        mCarOwnersMutableLiveData.postValue(carOwners);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
+    public void getCarOwnersList() {
 
-                    }
-                });
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadStateMutableLiveData.postValue(true);
+
+                mDisposable = mCarOwnerRepo.readCarOwnerData()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnTerminate(new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                loadStateMutableLiveData.postValue(false);
+                            }
+                        })
+                        .subscribe(new Consumer<List<CarOwner>>() {
+                            @Override
+                            public void accept(List<CarOwner> carOwners) throws Exception {
+                                mCarOwnersMutableLiveData.postValue(carOwners);
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+
+                            }
+                        });
+            }
+        });
+        thread.start();
     }
 
     @Override

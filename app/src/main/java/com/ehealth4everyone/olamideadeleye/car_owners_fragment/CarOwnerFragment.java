@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ehealth4everyone.olamideadeleye.App;
 import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
@@ -27,7 +29,10 @@ public class CarOwnerFragment extends Fragment {
     public String TAG = this.getClass().getSimpleName();
 
     @Inject CarOwnerRepo mCarOwnerRepo;
-    FragmentCarOwnerBinding mBinding;
+    @Inject CarOwnerAdapter mCarOwnerAdapter;
+    private FragmentCarOwnerBinding mBinding;
+    private RecyclerView mRecyclerView;
+
 
     @Nullable
     @Override
@@ -44,14 +49,31 @@ public class CarOwnerFragment extends Fragment {
             App app = (App) getActivity().getApplication();
             app.mAppComponent.plusCarOwnerFragment().injectCarOwnerFragment(this);
 
+            mRecyclerView = mBinding.rvCarOwner;
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(linearLayoutManager);
+            mRecyclerView.setAdapter(mCarOwnerAdapter);
             CarOwnerViewModelFactory factory = new CarOwnerViewModelFactory(mCarOwnerRepo);
             CarOwnerViewModel carOwnerViewModel = new ViewModelProvider(this, factory)
                     .get(CarOwnerViewModel.class);
 
+            carOwnerViewModel.getCarOwnersList();
+
             carOwnerViewModel.mCarOwnersLiveData.observe(this, new Observer<List<CarOwner>>() {
                 @Override
                 public void onChanged(List<CarOwner> carOwners) {
-                    Toast.makeText(getActivity(), filter.toString(), Toast.LENGTH_LONG).show();
+                    mCarOwnerAdapter.setItems(carOwners);
+                    mRecyclerView.setAdapter(mCarOwnerAdapter);
+                }
+            });
+
+            carOwnerViewModel.loadStateLiveData.observe(this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+                    if (aBoolean)
+                        mBinding.progressCircular.setVisibility(View.VISIBLE);
+                    else
+                        mBinding.progressCircular.setVisibility(View.INVISIBLE);
                 }
             });
         }

@@ -50,4 +50,40 @@ public class StringUtil {
             return formattedGender + "ALL";
         return formattedGender + gender;
     }
+
+    public static String formatFullName(String firstName, String lastName) {
+        String formattedFullName = "Full Name: ";
+
+        return formattedFullName + firstName + " " + lastName;
+    }
+
+    public static String formatEmail(String email) {
+        String formattedEmail = "Email: ";
+
+        return formattedEmail + email;
+    }
+
+    public static String formatountry(String country) {
+        String formattedCountry = "Country: ";
+
+        return formattedCountry + country;
+    }
+
+    public static String formatCarMakeColorYear(String carMake, String color, int year) {
+        String formattedCarMakeColorYear = "Car Make, Color and Year: ";
+
+        return formattedCarMakeColorYear + color + " " + year + " " + carMake;
+    }
+
+    public static String formatJobTitle(String jobTitle) {
+        String formattedJobTitle = "Job Title: ";
+
+        return formattedJobTitle + jobTitle;
+    }
+
+    public static String formatBio(String bio) {
+        String formattedBio = "Bio: ";
+
+        return formattedBio + bio;
+    }
 }
