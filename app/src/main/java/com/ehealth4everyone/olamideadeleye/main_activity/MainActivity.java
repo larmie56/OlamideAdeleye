@@ -1,8 +1,10 @@
-package com.ehealth4everyone.olamideadeleye;
+package com.ehealth4everyone.olamideadeleye.main_activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.ehealth4everyone.olamideadeleye.R;
 
 public class MainActivity extends AppCompatActivity {
 
