@@ -15,10 +15,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class FilterRepoImpl implements FilterRepo {
 
     Context mContext;
 
+    @Inject
     public FilterRepoImpl(Context context) {
         mContext = context;
     }

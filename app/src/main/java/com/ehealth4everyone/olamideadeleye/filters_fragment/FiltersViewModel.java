@@ -14,10 +14,11 @@ public class FiltersViewModel extends ViewModel {
 
     private LiveData<List<Filter>> mFilterLiveData = mFilterMutableLiveData;
 
-    FilterRepo mFilterRepo;
+    private FilterRepo mFilterRepo;
 
     public FiltersViewModel(FilterRepo filterRepo) {
         mFilterRepo = filterRepo;
+        getFilterList();
     }
 
     public void getFilterList() {
