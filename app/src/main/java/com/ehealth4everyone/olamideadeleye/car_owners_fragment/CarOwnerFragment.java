@@ -50,6 +50,7 @@ public class CarOwnerFragment extends Fragment {
             App app = (App) getActivity().getApplication();
             app.mAppComponent.plusCarOwnerFragment().injectCarOwnerFragment(this);
 
+            mBinding.tvCarOwnerFragmentTitle.setText("Car Owners");
             mRecyclerView = mBinding.rvCarOwner;
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -74,10 +75,14 @@ public class CarOwnerFragment extends Fragment {
             carOwnerViewModel.loadStateLiveData.observe(this, new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean aBoolean) {
-                    if (aBoolean)
+                    if (aBoolean) {
+                        mBinding.tvCarOwnerFragmentTitle.setVisibility(View.INVISIBLE);
                         mBinding.progressCircular.setVisibility(View.VISIBLE);
-                    else
+                    }
+                    else {
                         mBinding.progressCircular.setVisibility(View.INVISIBLE);
+                        mBinding.tvCarOwnerFragmentTitle.setVisibility(View.VISIBLE);
+                    }
                 }
             });
         }

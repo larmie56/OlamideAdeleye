@@ -49,6 +49,7 @@ public class FilterListFragment extends Fragment {
             appComponent.plusFilterListFragment().injectFilterListFragment(this);
 
             mRecyclerView = mFilterListBinding.filterListRv;
+            mFilterListBinding.tvFilterFragmentTitle.setText("Filters");
             mFilterListAdapter = new FilterListAdapter(getActivity(), (FilterItemClickHandler) getActivity());
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(linearLayoutManager);
