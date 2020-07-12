@@ -43,36 +43,38 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
         AppComponent appComponent = app.mAppComponent;
         appComponent.injectMainActivity(this);
 
-        //Notify user of data loading
-        Toast.makeText(MainActivity.this, "Loading data...", Toast.LENGTH_SHORT).show();
-        final ProgressBar progressBar = findViewById(R.id.progress_circular);
-        progressBar.setVisibility(View.VISIBLE);
+        if (savedInstanceState == null) {
+            //Notify user of data loading
+            Toast.makeText(MainActivity.this, "Loading data...", Toast.LENGTH_SHORT).show();
+            final ProgressBar progressBar = findViewById(R.id.progress_circular);
+            progressBar.setVisibility(View.VISIBLE);
 
-        //switch to a background thread
-        final Scheduler scheduler = Schedulers.newThread();
-        newThreadDisposable = scheduler.scheduleDirect(new Runnable() {
-            @Override
-            public void run() {
-                //Load the car owners list from the .csv file on creation of MainActivity
-                ioThreadDisposable = mCarOwnerRepo.readCarOwnerData()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<List<CarOwner>>() {
-                            @Override
-                            public void accept(List<CarOwner> carOwners) throws Exception {
-                                progressBar.setVisibility(View.INVISIBLE);
-                                if (savedInstanceState == null)
-                                    openFilterListFragment();
-                                mCarOwners = carOwners;
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
+            //switch to a background thread
+            final Scheduler scheduler = Schedulers.newThread();
+            newThreadDisposable = scheduler.scheduleDirect(new Runnable() {
+                @Override
+                public void run() {
+                    //Load the car owners list from the .csv file on creation of MainActivity
+                    ioThreadDisposable = mCarOwnerRepo.readCarOwnerData()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Consumer<List<CarOwner>>() {
+                                @Override
+                                public void accept(List<CarOwner> carOwners) throws Exception {
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                        openFilterListFragment();
+                                    mCarOwners = carOwners;
+                                }
+                            }, new Consumer<Throwable>() {
+                                @Override
+                                public void accept(Throwable throwable) throws Exception {
 
-                            }
-                        });
-            }
-        });
+                                }
+                            });
+
+                }
+            });
+        }
     }
 
     private void openFilterListFragment() {

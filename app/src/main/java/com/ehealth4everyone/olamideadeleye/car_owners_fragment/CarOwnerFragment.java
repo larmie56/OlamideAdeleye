@@ -61,10 +61,14 @@ public class CarOwnerFragment extends Fragment {
                 CarOwnerViewModelFactory factory = new CarOwnerViewModelFactory(mCarOwners, filter);
                 CarOwnerViewModel carOwnerViewModel = new ViewModelProvider(this, factory)
                         .get(CarOwnerViewModel.class);
+                carOwnerViewModel.getFilteredCarOwnersList();
 
                 carOwnerViewModel.mCarOwnersLiveData.observe(getActivity(), new Observer<List<CarOwner>>() {
                     @Override
                     public void onChanged(List<CarOwner> carOwners) {
+                        if (carOwners.isEmpty()) {
+                            Toast.makeText(getActivity(), "Applied conditions does not match any car owner", Toast.LENGTH_SHORT).show();
+                        }
                         mCarOwnerAdapter.setItems(carOwners);
                         mRecyclerView.setAdapter(mCarOwnerAdapter);
                     }

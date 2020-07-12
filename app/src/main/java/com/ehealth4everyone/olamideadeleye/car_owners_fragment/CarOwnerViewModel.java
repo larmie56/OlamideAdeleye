@@ -30,10 +30,10 @@ public class CarOwnerViewModel extends ViewModel {
     public CarOwnerViewModel(List<CarOwner> carOwners, Filter filter) {
         mCarOwners = carOwners;
         mFilter = filter;
-        getFilteredCarOwnersList();
+        //getFilteredCarOwnersList();
     }
 
-    private List<CarOwner> filter(List<CarOwner> carOwners, Filter filter) {
+    public List<CarOwner> filterCarOwnersList(List<CarOwner> carOwners, Filter filter) {
         List<CarOwner> filteredCarOwners = new ArrayList<>();
 
 
@@ -96,7 +96,7 @@ public class CarOwnerViewModel extends ViewModel {
         mDisposable = scheduler.scheduleDirect(new Runnable() {
             @Override
             public void run() {
-                List<CarOwner> filteredCarOwners = filter(mCarOwners, mFilter);
+                List<CarOwner> filteredCarOwners = filterCarOwnersList(mCarOwners, mFilter);
                 //load complete hide spinner
                 loadStateMutableLiveData.postValue(false);
                 mCarOwnersMutableLiveData.postValue(filteredCarOwners);
