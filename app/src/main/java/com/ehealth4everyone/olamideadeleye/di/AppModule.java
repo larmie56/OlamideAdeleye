@@ -15,7 +15,7 @@ import dagger.Provides;
 @Module
 public class AppModule {
 
-    static private Application mApplication;
+    private Application mApplication;
 
     public AppModule(Application application) {
         mApplication = application;
@@ -23,7 +23,13 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public static Context providesContext() {
+    public Context providesContext() {
         return mApplication;
+    }
+
+    @Provides
+    @Singleton
+    public CarOwnerRepoImpl providesCarOwnerRepo() {
+        return new CarOwnerRepoImpl(mApplication);
     }
 }

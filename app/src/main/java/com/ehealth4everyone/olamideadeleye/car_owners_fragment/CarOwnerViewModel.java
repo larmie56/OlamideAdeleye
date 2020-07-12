@@ -30,7 +30,7 @@ public class CarOwnerViewModel extends ViewModel {
     public CarOwnerViewModel(List<CarOwner> carOwners, Filter filter) {
         mCarOwners = carOwners;
         mFilter = filter;
-        //getFilteredCarOwnersList();
+        getFilteredCarOwnersList();
     }
 
     public List<CarOwner> filterCarOwnersList(List<CarOwner> carOwners, Filter filter) {
@@ -89,15 +89,15 @@ public class CarOwnerViewModel extends ViewModel {
 
     public void getFilteredCarOwnersList() {
 
-        //show spinner to indicate loading
-        loadStateMutableLiveData.postValue(true);
         //switch to a background thread
         final Scheduler scheduler = Schedulers.newThread();
         mDisposable = scheduler.scheduleDirect(new Runnable() {
             @Override
             public void run() {
+                //show progress bar to indicate loading
+                loadStateMutableLiveData.postValue(true);
                 List<CarOwner> filteredCarOwners = filterCarOwnersList(mCarOwners, mFilter);
-                //load complete hide spinner
+                //load complete hide progress bar
                 loadStateMutableLiveData.postValue(false);
                 mCarOwnersMutableLiveData.postValue(filteredCarOwners);
             }

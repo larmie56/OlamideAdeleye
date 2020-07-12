@@ -2,6 +2,8 @@ package com.ehealth4everyone.olamideadeleye.main_activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.view.View;
@@ -20,18 +22,12 @@ import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepoImpl;
 
 import java.util.List;
 
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements FilterItemClickHandler {
 
-    Disposable newThreadDisposable;
-    Disposable ioThreadDisposable;
-
-    CarOwnerRepo mCarOwnerRepo = new CarOwnerRepoImpl(this);
+    @Inject
+    CarOwnerRepoImpl mCarOwnerRepo;
     public List<CarOwner> mCarOwners;
 
     @Override
@@ -43,38 +39,33 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
         AppComponent appComponent = app.mAppComponent;
         appComponent.injectMainActivity(this);
 
-        if (savedInstanceState == null) {
-            //Notify user of data loading
-            Toast.makeText(MainActivity.this, "Loading data...", Toast.LENGTH_SHORT).show();
-            final ProgressBar progressBar = findViewById(R.id.progress_circular);
-            progressBar.setVisibility(View.VISIBLE);
+        final ProgressBar progressBar = findViewById(R.id.progress_circular);
 
-            //switch to a background thread
-            final Scheduler scheduler = Schedulers.newThread();
-            newThreadDisposable = scheduler.scheduleDirect(new Runnable() {
-                @Override
-                public void run() {
-                    //Load the car owners list from the .csv file on creation of MainActivity
-                    ioThreadDisposable = mCarOwnerRepo.readCarOwnerData()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Consumer<List<CarOwner>>() {
-                                @Override
-                                public void accept(List<CarOwner> carOwners) throws Exception {
-                                    progressBar.setVisibility(View.INVISIBLE);
-                                        openFilterListFragment();
-                                    mCarOwners = carOwners;
-                                }
-                            }, new Consumer<Throwable>() {
-                                @Override
-                                public void accept(Throwable throwable) throws Exception {
-
-                                }
-                            });
-
+        MainActivityViewModelFactory factory = new MainActivityViewModelFactory(mCarOwnerRepo);
+        MainActivityViewModel mainActivityViewModel = new ViewModelProvider(this, factory)
+                .get(MainActivityViewModel.class);
+        mainActivityViewModel.loadStateLiveData.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    Toast.makeText(MainActivity.this, "Loading Data", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.VISIBLE);
                 }
-            });
-        }
+                else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        mainActivityViewModel.mCarOwnersLiveData.observe(this, new Observer<List<CarOwner>>() {
+            @Override
+            public void onChanged(List<CarOwner> carOwners) {
+                mCarOwners = carOwners;
+                //don't add the new fragment if the activity has been created previously
+                if (savedInstanceState == null)
+                    openFilterListFragment();
+            }
+        });
     }
 
     private void openFilterListFragment() {
@@ -97,9 +88,6 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
     @Override
     protected void onStop() {
         super.onStop();
-        if (newThreadDisposable != null && !newThreadDisposable.isDisposed())
-            newThreadDisposable.dispose();
-        if (ioThreadDisposable != null && !ioThreadDisposable.isDisposed())
-            ioThreadDisposable.dispose();
+
     }
 }
