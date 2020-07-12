@@ -3,17 +3,35 @@ package com.ehealth4everyone.olamideadeleye.car_owners_fragment;
 import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
 import com.ehealth4everyone.olamideadeleye.filter_model.Filter;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+
+import io.reactivex.Scheduler;
+import io.reactivex.android.plugins.RxAndroidPlugins;
+import io.reactivex.functions.Function;
+import io.reactivex.plugins.RxJavaPlugins;
+import io.reactivex.schedulers.TestScheduler;
 
 import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
 public class FilterCarOwnersListTest {
+
+    @Before
+    public void setup() {
+        RxJavaPlugins.setNewThreadSchedulerHandler(new Function<Scheduler, Scheduler>() {
+            @Override
+            public Scheduler apply(Scheduler scheduler) throws Exception {
+                return new TestScheduler();
+            }
+        });
+    }
 
     @Test
     public void filterCarOwnersListTest_1() {
