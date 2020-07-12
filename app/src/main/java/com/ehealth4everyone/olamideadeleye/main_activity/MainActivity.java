@@ -2,20 +2,36 @@ package com.ehealth4everyone.olamideadeleye.main_activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.ehealth4everyone.olamideadeleye.App;
 import com.ehealth4everyone.olamideadeleye.R;
 import com.ehealth4everyone.olamideadeleye.car_owners_fragment.CarOwnerFragment;
+import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
 import com.ehealth4everyone.olamideadeleye.di.AppComponent;
 import com.ehealth4everyone.olamideadeleye.filters_fragment.FilterItemClickHandler;
 import com.ehealth4everyone.olamideadeleye.filters_fragment.FilterListFragment;
+import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepo;
+import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepoImpl;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements FilterItemClickHandler {
 
+    @Inject
+    CarOwnerRepoImpl mCarOwnerRepo;
+    public List<CarOwner> mCarOwners;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -23,7 +39,33 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
         AppComponent appComponent = app.mAppComponent;
         appComponent.injectMainActivity(this);
 
-        openFilterListFragment();
+        final ProgressBar progressBar = findViewById(R.id.progress_circular);
+
+        MainActivityViewModelFactory factory = new MainActivityViewModelFactory(mCarOwnerRepo);
+        MainActivityViewModel mainActivityViewModel = new ViewModelProvider(this, factory)
+                .get(MainActivityViewModel.class);
+        mainActivityViewModel.loadStateLiveData.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    Toast.makeText(MainActivity.this, "Loading Data", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+                else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        mainActivityViewModel.mCarOwnersLiveData.observe(this, new Observer<List<CarOwner>>() {
+            @Override
+            public void onChanged(List<CarOwner> carOwners) {
+                mCarOwners = carOwners;
+                //don't add the new fragment if the activity has been created previously
+                if (savedInstanceState == null)
+                    openFilterListFragment();
+            }
+        });
     }
 
     private void openFilterListFragment() {
@@ -41,5 +83,11 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
         fragmentTransaction.replace(R.id.fragment_container, carOwnerFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
     }
 }

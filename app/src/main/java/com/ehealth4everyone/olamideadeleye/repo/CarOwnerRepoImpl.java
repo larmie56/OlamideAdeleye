@@ -7,21 +7,17 @@ import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
 import com.opencsv.CSVReader;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 
 public class CarOwnerRepoImpl implements CarOwnerRepo {
     Context mContext;
@@ -58,7 +54,7 @@ public class CarOwnerRepoImpl implements CarOwnerRepo {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return Single.just(carOwners);
+        return Single.just(carOwners).subscribeOn(Schedulers.newThread());
     }
 
 }

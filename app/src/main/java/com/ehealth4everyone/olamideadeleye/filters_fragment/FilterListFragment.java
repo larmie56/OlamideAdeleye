@@ -45,24 +45,27 @@ public class FilterListFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        AppComponent appComponent = ((App) getActivity().getApplication()).mAppComponent;
-        appComponent.plusFilterListFragment().injectFilterListFragment(this);
+            AppComponent appComponent = ((App) getActivity().getApplication()).mAppComponent;
+            appComponent.plusFilterListFragment().injectFilterListFragment(this);
 
-        mRecyclerView = mFilterListBinding.filterListRv;
-        mFilterListAdapter = new FilterListAdapter(getActivity(), (FilterItemClickHandler) getActivity());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+            mRecyclerView = mFilterListBinding.filterListRv;
+            mFilterListBinding.tvFilterFragmentTitle.setText("Filters");
+            mFilterListAdapter = new FilterListAdapter(getActivity(), (FilterItemClickHandler) getActivity());
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(linearLayoutManager);
 
 
-        FiltersViewModelFactory factory = new FiltersViewModelFactory(mFilterRepo);
-        mFiltersViewModel = new ViewModelProvider(this, factory).get(FiltersViewModel.class);
-        mFiltersViewModel.getFiltersLiveData().observe(this, new Observer<List<Filter>>() {
-            @Override
-            public void onChanged(List<Filter> filters) {
-                mFilterListAdapter.setItems(filters);
-                mRecyclerView.setAdapter(mFilterListAdapter);
-            }
-        });
-    }
+            FiltersViewModelFactory factory = new FiltersViewModelFactory(mFilterRepo);
+            mFiltersViewModel = new ViewModelProvider(getActivity(), factory).get(FiltersViewModel.class);
+            mFiltersViewModel.getFiltersLiveData().observe(this, new Observer<List<Filter>>() {
+                @Override
+                public void onChanged(List<Filter> filters) {
+                    mFilterListAdapter.setItems(filters);
+                    mRecyclerView.setAdapter(mFilterListAdapter);
+                }
+            });
+
+
+        }
+
 }

@@ -10,12 +10,15 @@ public class App extends Application {
 
     public AppComponent mAppComponent;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         mAppComponent = DaggerAppComponent
                 .builder()
-                .appModule(new AppModule(this)).build();
+                .appModule(new AppModule(this))
+                .build();
+
     }
 }

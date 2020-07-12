@@ -18,7 +18,7 @@ import com.ehealth4everyone.olamideadeleye.App;
 import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
 import com.ehealth4everyone.olamideadeleye.databinding.FragmentCarOwnerBinding;
 import com.ehealth4everyone.olamideadeleye.filter_model.Filter;
-import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepo;
+import com.ehealth4everyone.olamideadeleye.main_activity.MainActivity;
 
 import java.util.List;
 
@@ -28,10 +28,11 @@ public class CarOwnerFragment extends Fragment {
 
     public String TAG = this.getClass().getSimpleName();
 
-    @Inject CarOwnerRepo mCarOwnerRepo;
-    @Inject CarOwnerAdapter mCarOwnerAdapter;
+    @Inject
+    CarOwnerAdapter mCarOwnerAdapter;
     private FragmentCarOwnerBinding mBinding;
     private RecyclerView mRecyclerView;
+    private List<CarOwner> mCarOwners;
 
 
     @Nullable
@@ -49,19 +50,23 @@ public class CarOwnerFragment extends Fragment {
             App app = (App) getActivity().getApplication();
             app.mAppComponent.plusCarOwnerFragment().injectCarOwnerFragment(this);
 
+            mBinding.tvCarOwnerFragmentTitle.setText("Car Owners");
             mRecyclerView = mBinding.rvCarOwner;
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(linearLayoutManager);
             mRecyclerView.setAdapter(mCarOwnerAdapter);
-            CarOwnerViewModelFactory factory = new CarOwnerViewModelFactory(mCarOwnerRepo);
+
+            mCarOwners = ((MainActivity) getActivity()).mCarOwners;
+            CarOwnerViewModelFactory factory = new CarOwnerViewModelFactory(mCarOwners, filter);
             CarOwnerViewModel carOwnerViewModel = new ViewModelProvider(this, factory)
                     .get(CarOwnerViewModel.class);
 
-            carOwnerViewModel.getCarOwnersList();
-
-            carOwnerViewModel.mCarOwnersLiveData.observe(this, new Observer<List<CarOwner>>() {
+            carOwnerViewModel.mCarOwnersLiveData.observe(getActivity(), new Observer<List<CarOwner>>() {
                 @Override
                 public void onChanged(List<CarOwner> carOwners) {
+                    if (carOwners.isEmpty()) {
+                        Toast.makeText(getActivity(), "Applied conditions does not match any car owner", Toast.LENGTH_SHORT).show();
+                    }
                     mCarOwnerAdapter.setItems(carOwners);
                     mRecyclerView.setAdapter(mCarOwnerAdapter);
                 }
@@ -70,10 +75,14 @@ public class CarOwnerFragment extends Fragment {
             carOwnerViewModel.loadStateLiveData.observe(this, new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean aBoolean) {
-                    if (aBoolean)
+                    if (aBoolean) {
+                        mBinding.tvCarOwnerFragmentTitle.setVisibility(View.INVISIBLE);
                         mBinding.progressCircular.setVisibility(View.VISIBLE);
-                    else
+                    }
+                    else {
                         mBinding.progressCircular.setVisibility(View.INVISIBLE);
+                        mBinding.tvCarOwnerFragmentTitle.setVisibility(View.VISIBLE);
+                    }
                 }
             });
         }
