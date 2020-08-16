@@ -1,4 +1,4 @@
-package com.ehealth4everyone.olamideadeleye.filters_fragment;
+package com.ehealth4everyone.olamideadeleye.ui.filters_fragment;
 
 import android.os.Bundle;
 

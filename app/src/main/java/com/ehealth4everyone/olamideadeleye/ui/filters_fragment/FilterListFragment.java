@@ -1,4 +1,4 @@
-package com.ehealth4everyone.olamideadeleye.filters_fragment;
+package com.ehealth4everyone.olamideadeleye.ui.filters_fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ehealth4everyone.olamideadeleye.App;
 import com.ehealth4everyone.olamideadeleye.databinding.FragmentFilterListBinding;
 import com.ehealth4everyone.olamideadeleye.di.AppComponent;
-import com.ehealth4everyone.olamideadeleye.filter_model.Filter;
+import com.ehealth4everyone.olamideadeleye.models.Filter;
 import com.ehealth4everyone.olamideadeleye.repo.FilterRepo;
 
 import java.util.List;

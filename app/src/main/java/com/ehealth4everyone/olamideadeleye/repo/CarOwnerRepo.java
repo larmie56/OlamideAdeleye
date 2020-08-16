@@ -1,6 +1,6 @@
 package com.ehealth4everyone.olamideadeleye.repo;
 
-import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
+import com.ehealth4everyone.olamideadeleye.models.CarOwner;
 
 import java.util.List;
 

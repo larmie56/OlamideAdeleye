@@ -1,4 +1,4 @@
-package com.ehealth4everyone.olamideadeleye.car_owners_fragment;
+package com.ehealth4everyone.olamideadeleye.ui.car_owners_fragment;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
+import com.ehealth4everyone.olamideadeleye.models.CarOwner;
 import com.ehealth4everyone.olamideadeleye.databinding.CarOwnerItemBinding;
 import com.ehealth4everyone.olamideadeleye.util.StringUtil;
 

@@ -3,7 +3,7 @@ package com.ehealth4everyone.olamideadeleye.repo;
 import android.content.Context;
 import android.util.Log;
 
-import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
+import com.ehealth4everyone.olamideadeleye.models.CarOwner;
 import com.opencsv.CSVReader;
 
 import java.io.BufferedReader;

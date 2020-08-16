@@ -1,6 +1,6 @@
 package com.ehealth4everyone.olamideadeleye.di;
 
-import com.ehealth4everyone.olamideadeleye.main_activity.MainActivity;
+import com.ehealth4everyone.olamideadeleye.ui.main_activity.MainActivity;
 
 import javax.inject.Singleton;
 

@@ -1,4 +1,4 @@
-package com.ehealth4everyone.olamideadeleye.car_owners_model;
+package com.ehealth4everyone.olamideadeleye.models;
 
 public class CarOwner {
 

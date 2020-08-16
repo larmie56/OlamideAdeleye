@@ -1,7 +1,8 @@
 package com.ehealth4everyone.olamideadeleye.car_owners_fragment;
 
-import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
-import com.ehealth4everyone.olamideadeleye.filter_model.Filter;
+import com.ehealth4everyone.olamideadeleye.models.CarOwner;
+import com.ehealth4everyone.olamideadeleye.models.Filter;
+import com.ehealth4everyone.olamideadeleye.ui.car_owners_fragment.CarOwnerViewModel;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,10 +11,8 @@ import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.reactivex.Scheduler;
-import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.functions.Function;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.TestScheduler;

@@ -1,10 +1,10 @@
-package com.ehealth4everyone.olamideadeleye.filters_fragment;
+package com.ehealth4everyone.olamideadeleye.ui.filters_fragment;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.ehealth4everyone.olamideadeleye.filter_model.Filter;
+import com.ehealth4everyone.olamideadeleye.models.Filter;
 import com.ehealth4everyone.olamideadeleye.repo.FilterRepo;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.ehealth4everyone.olamideadeleye.di;
 
-import com.ehealth4everyone.olamideadeleye.filters_fragment.FilterListFragment;
+import com.ehealth4everyone.olamideadeleye.ui.filters_fragment.FilterListFragment;
 
 import dagger.Subcomponent;
 

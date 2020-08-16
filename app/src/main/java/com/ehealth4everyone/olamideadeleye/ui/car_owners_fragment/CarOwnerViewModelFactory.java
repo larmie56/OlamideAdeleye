@@ -1,12 +1,11 @@
-package com.ehealth4everyone.olamideadeleye.car_owners_fragment;
+package com.ehealth4everyone.olamideadeleye.ui.car_owners_fragment;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
-import com.ehealth4everyone.olamideadeleye.filter_model.Filter;
-import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepo;
+import com.ehealth4everyone.olamideadeleye.models.CarOwner;
+import com.ehealth4everyone.olamideadeleye.models.Filter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;

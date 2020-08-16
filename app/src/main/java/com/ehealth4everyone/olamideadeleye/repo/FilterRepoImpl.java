@@ -3,7 +3,7 @@ package com.ehealth4everyone.olamideadeleye.repo;
 import android.content.Context;
 import android.util.Log;
 
-import com.ehealth4everyone.olamideadeleye.filter_model.Filter;
+import com.ehealth4everyone.olamideadeleye.models.Filter;
 
 import org.json.JSONArray;
 import org.json.JSONException;

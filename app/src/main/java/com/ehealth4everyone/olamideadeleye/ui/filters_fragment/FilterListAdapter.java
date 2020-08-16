@@ -1,4 +1,4 @@
-package com.ehealth4everyone.olamideadeleye.filters_fragment;
+package com.ehealth4everyone.olamideadeleye.ui.filters_fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,12 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ehealth4everyone.olamideadeleye.databinding.FilterItemListBinding;
-import com.ehealth4everyone.olamideadeleye.filter_model.Filter;
+import com.ehealth4everyone.olamideadeleye.models.Filter;
 import com.ehealth4everyone.olamideadeleye.util.StringUtil;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.ViewHolder> {
     FilterItemListBinding mBinding;

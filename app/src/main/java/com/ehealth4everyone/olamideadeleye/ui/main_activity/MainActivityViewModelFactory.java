@@ -1,4 +1,4 @@
-package com.ehealth4everyone.olamideadeleye.main_activity;
+package com.ehealth4everyone.olamideadeleye.ui.main_activity;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;

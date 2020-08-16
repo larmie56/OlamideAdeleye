@@ -1,4 +1,4 @@
-package com.ehealth4everyone.olamideadeleye.filter_model;
+package com.ehealth4everyone.olamideadeleye.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

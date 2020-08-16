@@ -1,10 +1,10 @@
-package com.ehealth4everyone.olamideadeleye.main_activity;
+package com.ehealth4everyone.olamideadeleye.ui.main_activity;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
+import com.ehealth4everyone.olamideadeleye.models.CarOwner;
 import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepoImpl;
 
 import java.util.List;
@@ -31,7 +31,6 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void loadCarOwnersData() {
-
         loadStateMutableLiveData.postValue(true);
         //switch to a background thread
         final Scheduler scheduler = Schedulers.newThread();

@@ -1,4 +1,4 @@
-package com.ehealth4everyone.olamideadeleye.main_activity;
+package com.ehealth4everyone.olamideadeleye.ui.main_activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -12,12 +12,11 @@ import android.widget.Toast;
 
 import com.ehealth4everyone.olamideadeleye.App;
 import com.ehealth4everyone.olamideadeleye.R;
-import com.ehealth4everyone.olamideadeleye.car_owners_fragment.CarOwnerFragment;
-import com.ehealth4everyone.olamideadeleye.car_owners_model.CarOwner;
+import com.ehealth4everyone.olamideadeleye.ui.car_owners_fragment.CarOwnerFragment;
+import com.ehealth4everyone.olamideadeleye.models.CarOwner;
 import com.ehealth4everyone.olamideadeleye.di.AppComponent;
-import com.ehealth4everyone.olamideadeleye.filters_fragment.FilterItemClickHandler;
-import com.ehealth4everyone.olamideadeleye.filters_fragment.FilterListFragment;
-import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepo;
+import com.ehealth4everyone.olamideadeleye.ui.filters_fragment.FilterItemClickHandler;
+import com.ehealth4everyone.olamideadeleye.ui.filters_fragment.FilterListFragment;
 import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepoImpl;
 
 import java.util.List;
