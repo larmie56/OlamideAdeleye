@@ -1,8 +1,8 @@
 package com.ehealth4everyone.olamideadeleye.ui.filters_fragment;
 
-import android.os.Bundle;
+import com.ehealth4everyone.olamideadeleye.models.Filter;
 
 public interface FilterItemClickHandler {
 
-    void openCarOwnerFragment(Bundle bundle);
+    void openCarOwnerFragment(Filter filter);
 }

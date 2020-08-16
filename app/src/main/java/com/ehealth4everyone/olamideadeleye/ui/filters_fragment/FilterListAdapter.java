@@ -40,10 +40,8 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(Filter.TAG, filter);
-                holder.handleOnClick(bundle);
+            public void onClick(View view) {;
+                holder.handleOnClick(filter);
             }
         });
     }
@@ -75,8 +73,8 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
             this.mBinding.tvColor.setText(StringUtil.formatColors(filter.getColors()));
         }
 
-        public void handleOnClick(Bundle bundle) {
-            this.mClickHandler.openCarOwnerFragment(bundle);
+        public void handleOnClick(Filter filter) {
+            this.mClickHandler.openCarOwnerFragment(filter);
         }
     }
 }

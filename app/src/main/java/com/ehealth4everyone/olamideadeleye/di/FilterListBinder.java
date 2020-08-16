@@ -9,7 +9,6 @@ import dagger.Module;
 @Module
 public interface FilterListBinder {
 
-    @FilterListScope
     @Binds
     FilterRepo providersFilterRepo(FilterRepoImpl filterRepoImpl);
 }

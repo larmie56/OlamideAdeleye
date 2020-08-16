@@ -7,10 +7,9 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(modules = {AppModule.class})
+@Component(modules = {AppModule.class, FilterListBinder.class})
 public interface AppComponent {
 
     void injectMainActivity(MainActivity mainActivity);
-    FilterListComponent plusFilterListFragment();
     CarOwnerComponent plusCarOwnerFragment();
 }

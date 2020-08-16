@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.ehealth4everyone.olamideadeleye.App;
 import com.ehealth4everyone.olamideadeleye.R;
+import com.ehealth4everyone.olamideadeleye.models.Filter;
+import com.ehealth4everyone.olamideadeleye.repo.FilterRepo;
 import com.ehealth4everyone.olamideadeleye.ui.car_owners_fragment.CarOwnerFragment;
 import com.ehealth4everyone.olamideadeleye.models.CarOwner;
 import com.ehealth4everyone.olamideadeleye.di.AppComponent;
@@ -25,9 +27,10 @@ import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements FilterItemClickHandler {
 
-    @Inject
-    CarOwnerRepoImpl mCarOwnerRepo;
+    @Inject CarOwnerRepoImpl mCarOwnerRepo;
+    @Inject FilterRepo mFilterRepo;
     public List<CarOwner> mCarOwners;
+    private MainActivityViewModel mMainActivityViewModel;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -40,10 +43,10 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
 
         final ProgressBar progressBar = findViewById(R.id.progress_circular);
 
-        MainActivityViewModelFactory factory = new MainActivityViewModelFactory(mCarOwnerRepo);
-        MainActivityViewModel mainActivityViewModel = new ViewModelProvider(this, factory)
+        MainActivityViewModelFactory factory = new MainActivityViewModelFactory(mCarOwnerRepo, mFilterRepo);
+        mMainActivityViewModel = new ViewModelProvider(this, factory)
                 .get(MainActivityViewModel.class);
-        mainActivityViewModel.loadStateLiveData.observe(this, new Observer<Boolean>() {
+        mMainActivityViewModel.getLoadState().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
@@ -56,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
             }
         });
 
-        mainActivityViewModel.mCarOwnersLiveData.observe(this, new Observer<List<CarOwner>>() {
+        //TODO: Optimize this block
+        mMainActivityViewModel.getCarOwners().observe(this, new Observer<List<CarOwner>>() {
             @Override
             public void onChanged(List<CarOwner> carOwners) {
                 mCarOwners = carOwners;
@@ -75,10 +79,10 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
     }
 
     @Override
-    public void openCarOwnerFragment(Bundle bundle) {
+    public void openCarOwnerFragment(Filter filter) {
+        mMainActivityViewModel.setSelectedFilter(filter);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         CarOwnerFragment carOwnerFragment = new CarOwnerFragment();
-        carOwnerFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.fragment_container, carOwnerFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -87,6 +91,5 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
     @Override
     protected void onStop() {
         super.onStop();
-
     }
 }
