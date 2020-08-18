@@ -26,10 +26,4 @@ public class AppModule {
     public Context providesContext() {
         return mApplication;
     }
-
-    @Provides
-    @Singleton
-    public CarOwnerRepoImpl providesCarOwnerRepo() {
-        return new CarOwnerRepoImpl(mApplication);
-    }
 }

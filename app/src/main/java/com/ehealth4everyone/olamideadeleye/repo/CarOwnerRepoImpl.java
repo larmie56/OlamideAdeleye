@@ -17,7 +17,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 
 public class CarOwnerRepoImpl implements CarOwnerRepo {
     Context mContext;
@@ -28,7 +27,7 @@ public class CarOwnerRepoImpl implements CarOwnerRepo {
     }
 
     @Override
-    public Single<List<CarOwner>> readCarOwnerData() {
+    public Single<List<CarOwner>> getCarOwnersFromAsset() {
         List<CarOwner> carOwners = new ArrayList<>();
 
         try {
@@ -42,7 +41,6 @@ public class CarOwnerRepoImpl implements CarOwnerRepo {
 
             String[] tokens;
             while ((tokens = csvReader.readNext()) != null) {
-                // nextLine[] is an array of values from the line
                 Log.d("Car Owner details -->", tokens[0]);
 
                 CarOwner carOwner = new CarOwner(Integer.parseInt(tokens[0]), tokens[1], tokens[2],
@@ -54,7 +52,7 @@ public class CarOwnerRepoImpl implements CarOwnerRepo {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return Single.just(carOwners).subscribeOn(Schedulers.newThread());
+        return Single.just(carOwners);
     }
 
 }

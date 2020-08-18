@@ -6,94 +6,78 @@ import androidx.lifecycle.ViewModel;
 
 import com.ehealth4everyone.olamideadeleye.models.CarOwner;
 import com.ehealth4everyone.olamideadeleye.models.Filter;
-import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepoImpl;
+import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepo;
 import com.ehealth4everyone.olamideadeleye.repo.FilterRepo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Scheduler;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivityViewModel extends ViewModel {
 
-    private final CarOwnerRepoImpl mCarOwnerRepo;
-    private Disposable newThreadDisposable;
-    private Disposable ioThreadDisposable;
-    private MutableLiveData<List<CarOwner>> mFilteredCarOwnersLiveData = new MutableLiveData<>();
-    private MutableLiveData<List<CarOwner>> mCarOwnersMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> loadStateMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> carOwnersLoadStateLiveData = new MutableLiveData<>();
-    private MutableLiveData<List<Filter>> mFilterMutableLiveData = new MutableLiveData<>();
-    private Filter mSelectedFilter;
-
-    private List<CarOwner> mCarOwners;
-
+    private final CarOwnerRepo mCarOwnerRepo;
     private FilterRepo mFilterRepo;
-    private Disposable mDisposable;
+    private CompositeDisposable mDisposable = new CompositeDisposable();
+    private MutableLiveData<List<CarOwner>> mFilteredCarOwnersLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<CarOwner>> mCarOwnersLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mainLoadStateLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> carOwnersLoadStateLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Filter>> mFilterLiveData = new MutableLiveData<>();
 
-    public MainActivityViewModel(CarOwnerRepoImpl carOwnerRepo, FilterRepo filterRepo) {
+    public MainActivityViewModel(CarOwnerRepo carOwnerRepo, FilterRepo filterRepo) {
         mCarOwnerRepo = carOwnerRepo;
         mFilterRepo = filterRepo;
-        loadCarOwnersData();
-        getFilterList();
     }
 
-    public void loadCarOwnersData() {
-        loadStateMutableLiveData.postValue(true);
+    public void getCarOwnersFromRepo() {
+        mainLoadStateLiveData.postValue(true);
         //switch to a background thread
         final Scheduler scheduler = Schedulers.newThread();
-        newThreadDisposable = scheduler.scheduleDirect(new Runnable() {
+        mDisposable.add(scheduler.scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 //Load the car owners list from the .csv file on creation of MainActivity
-                ioThreadDisposable = mCarOwnerRepo.readCarOwnerData()
+                mDisposable.add(mCarOwnerRepo.getCarOwnersFromAsset()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Consumer<List<CarOwner>>() {
                             @Override
                             public void accept(List<CarOwner> carOwners) throws Exception {
-                                mCarOwners = carOwners;
-                                loadStateMutableLiveData.postValue(false);
-                                mCarOwnersMutableLiveData.postValue(carOwners);
+                                mainLoadStateLiveData.postValue(false);
+                                mCarOwnersLiveData.postValue(carOwners);
                             }
                         }, new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
-
+                                throwable.printStackTrace();
                             }
-                        });
+                        }));
 
             }
-        });
+        }));
     }
 
-    public void getFilterList() {
-        Single<List<Filter>> filters = mFilterRepo.getFiltersFromJsonString(mFilterRepo.getJsonStringFromAsset());
-
-
-        mDisposable = filters.subscribeOn(Schedulers.io())
+    public void getFiltersFromRepo() {
+        mDisposable.add(mFilterRepo.getFiltersFromJsonString(mFilterRepo.getJsonStringFromAsset())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Filter>>() {
                     @Override
                     public void accept(List<Filter> filters) throws Exception {
-                        mFilterMutableLiveData.postValue(filters);
+                        mFilterLiveData.postValue(filters);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-
+                        throwable.printStackTrace();
                     }
-                });
+                }));
 
-    }
-
-    public void setSelectedFilter(Filter filter) {
-        mSelectedFilter = filter;
     }
 
     public List<CarOwner> filterCarOwnersList(List<CarOwner> carOwners, Filter filter) {
@@ -148,43 +132,36 @@ public class MainActivityViewModel extends ViewModel {
         return filteredCarOwners;
     }
 
-    public void getFilteredCarOwnersList() {
+    public void updateFilteredCarOwnersList(List<CarOwner> carOwners, Filter selectedFilter) {
         //switch to a background thread
         final Scheduler scheduler = Schedulers.newThread();
-        mDisposable = scheduler.scheduleDirect(new Runnable() {
+        mDisposable.add(scheduler.scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 //show progress bar to indicate loading
                 carOwnersLoadStateLiveData.postValue(true);
-                List<CarOwner> filteredCarOwners = filterCarOwnersList(mCarOwners, mSelectedFilter);
+                List<CarOwner> filteredCarOwners = filterCarOwnersList(carOwners, selectedFilter);
                 //load complete hide progress bar
                 carOwnersLoadStateLiveData.postValue(false);
                 mFilteredCarOwnersLiveData.postValue(filteredCarOwners);
             }
-        });
+        }));
     }
 
     @Override
     protected void onCleared() {
-        super.onCleared();
-        if (newThreadDisposable != null && !newThreadDisposable.isDisposed()) {
-            newThreadDisposable.dispose();
-        }
-        if (ioThreadDisposable != null && !ioThreadDisposable.isDisposed()) {
-            ioThreadDisposable.dispose();
-        }
         if (mDisposable != null && !mDisposable.isDisposed()) {
             mDisposable.dispose();
         }
     }
 
     public LiveData<List<Filter>> getFilters() {
-        return mFilterMutableLiveData;
+        return mFilterLiveData;
     }
 
-    public LiveData<Boolean> getLoadState() { return loadStateMutableLiveData;}
+    public LiveData<Boolean> getMainLoadState() { return mainLoadStateLiveData;}
 
-    public LiveData<List<CarOwner>> getCarOwners() { return mCarOwnersMutableLiveData;}
+    public LiveData<List<CarOwner>> getCarOwners() { return mCarOwnersLiveData;}
 
     public LiveData<Boolean> getCarOwnersLoadState() { return carOwnersLoadStateLiveData;}
 

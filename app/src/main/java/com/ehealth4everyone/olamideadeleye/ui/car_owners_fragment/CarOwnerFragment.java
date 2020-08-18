@@ -18,7 +18,6 @@ import com.ehealth4everyone.olamideadeleye.App;
 import com.ehealth4everyone.olamideadeleye.models.CarOwner;
 import com.ehealth4everyone.olamideadeleye.databinding.FragmentCarOwnerBinding;
 import com.ehealth4everyone.olamideadeleye.models.Filter;
-import com.ehealth4everyone.olamideadeleye.ui.main_activity.MainActivity;
 import com.ehealth4everyone.olamideadeleye.ui.main_activity.MainActivityViewModel;
 
 import java.util.List;
@@ -26,11 +25,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class CarOwnerFragment extends Fragment {
-
-    public String TAG = this.getClass().getSimpleName();
-
-    @Inject
-    CarOwnerAdapter mCarOwnerAdapter;
+    @Inject CarOwnerAdapter mCarOwnerAdapter;
     private FragmentCarOwnerBinding mBinding;
     private RecyclerView mRecyclerView;
     private List<CarOwner> mCarOwners;
@@ -45,41 +40,51 @@ public class CarOwnerFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        App app = (App) getActivity().getApplication();
-        app.mAppComponent.plusCarOwnerFragment().injectCarOwnerFragment(this);
+        final Bundle arguments = getArguments();
+        if (arguments != null) {
+            Filter filter = arguments.getParcelable(Filter.TAG);
+            App app = (App) getActivity().getApplication();
+            app.mAppComponent.plusCarOwnerFragment().injectCarOwnerFragment(this);
 
-        mBinding.tvCarOwnerFragmentTitle.setText("Car Owners");
-        mRecyclerView = mBinding.rvCarOwner;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.setAdapter(mCarOwnerAdapter);
+            mBinding.tvCarOwnerFragmentTitle.setText("Car Owners");
+            mRecyclerView = mBinding.rvCarOwner;
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(linearLayoutManager);
+            mRecyclerView.setAdapter(mCarOwnerAdapter);
 
-        mCarOwners = ((MainActivity) getActivity()).mCarOwners;
-        MainActivityViewModel mainActivityViewModel = new ViewModelProvider(requireActivity())
-                .get(MainActivityViewModel.class);
-
-        mainActivityViewModel.getFilteredCarOwnersList();
-        mainActivityViewModel.getCarOwnersLoadState().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    mBinding.tvCarOwnerFragmentTitle.setVisibility(View.INVISIBLE);
-                    mBinding.progressCircular.setVisibility(View.VISIBLE);
-                } else {
-                    mBinding.progressCircular.setVisibility(View.INVISIBLE);
-                    mBinding.tvCarOwnerFragmentTitle.setVisibility(View.VISIBLE);
+            MainActivityViewModel mainActivityViewModel = new ViewModelProvider(requireActivity())
+                    .get(MainActivityViewModel.class);
+            mainActivityViewModel.getCarOwners().observe(getActivity(), new Observer<List<CarOwner>>() {
+                @Override
+                public void onChanged(List<CarOwner> carOwners) {
+                    mCarOwners = carOwners;
                 }
-            }
-        });
-        mainActivityViewModel.getFilteredCarOwners().observe(getActivity(), new Observer<List<CarOwner>>() {
-            @Override
-            public void onChanged(List<CarOwner> carOwners) {
-                if (carOwners.isEmpty()) {
-                    Toast.makeText(getActivity(), "Applied conditions does not match any car owner", Toast.LENGTH_SHORT).show();
+            });
+            mainActivityViewModel.updateFilteredCarOwnersList(mCarOwners, filter);
+            mainActivityViewModel.getCarOwnersLoadState().observe(this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+                    if (aBoolean) {
+                        mBinding.tvCarOwnerFragmentTitle.setVisibility(View.INVISIBLE);
+                        mBinding.progressCircular.setVisibility(View.VISIBLE);
+                    } else {
+                        mBinding.progressCircular.setVisibility(View.INVISIBLE);
+                        mBinding.tvCarOwnerFragmentTitle.setVisibility(View.VISIBLE);
+                    }
                 }
-                mCarOwnerAdapter.setItems(carOwners);
-                mRecyclerView.setAdapter(mCarOwnerAdapter);
-            }
-        });
+            });
+            mainActivityViewModel.getFilteredCarOwners().observe(getActivity(), new Observer<List<CarOwner>>() {
+                @Override
+                public void onChanged(List<CarOwner> carOwners) {
+                    if (carOwners.isEmpty()) {
+                        Toast.makeText(getActivity(),
+                                "Applied conditions does not match any car owner", Toast.LENGTH_SHORT).show();
+                    } else {
+                        mCarOwnerAdapter.setItems(carOwners);
+                        mRecyclerView.setAdapter(mCarOwnerAdapter);
+                    }
+                }
+            });
+        }
     }
 }

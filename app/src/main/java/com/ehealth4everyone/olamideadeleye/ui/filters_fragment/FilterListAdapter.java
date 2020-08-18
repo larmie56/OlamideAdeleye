@@ -74,7 +74,9 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
         }
 
         public void handleOnClick(Filter filter) {
-            this.mClickHandler.openCarOwnerFragment(filter);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(Filter.TAG, filter);
+            this.mClickHandler.openCarOwnerFragment(bundle);
         }
     }
 }
