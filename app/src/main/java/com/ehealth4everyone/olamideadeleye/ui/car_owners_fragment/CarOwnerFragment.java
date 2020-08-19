@@ -60,7 +60,7 @@ public class CarOwnerFragment extends Fragment {
                 public void onChanged(Boolean isLoaded) {
                     if (isLoaded) {
                         //Only filter the car owners list if it has been loaded from the repo
-                        mainActivityViewModel.getCarOwners().observe(getActivity(), new Observer<List<CarOwner>>() {
+                        mainActivityViewModel.getCarOwners().observe(getViewLifecycleOwner(), new Observer<List<CarOwner>>() {
                             @Override
                             public void onChanged(List<CarOwner> carOwners) {
                                 mainActivityViewModel.updateFilteredCarOwnersList(carOwners, filter);
@@ -73,7 +73,7 @@ public class CarOwnerFragment extends Fragment {
                     }
                 }
             });
-            mainActivityViewModel.getIsCarOwnersFiltered().observe(this, new Observer<Boolean>() {
+            mainActivityViewModel.getIsCarOwnersFiltered().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean isFiltered) {
                     if (isFiltered) {

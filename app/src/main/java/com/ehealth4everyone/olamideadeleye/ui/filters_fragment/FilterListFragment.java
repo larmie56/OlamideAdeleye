@@ -39,12 +39,12 @@ public class FilterListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mRecyclerView = mFilterListBinding.filterListRv;
         mFilterListBinding.tvFilterFragmentTitle.setText("Filters");
-        mFilterListAdapter = new FilterListAdapter(getActivity(), (FilterItemClickHandler) getActivity());
+        mFilterListAdapter = new FilterListAdapter(getActivity());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
         mActivityViewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-        mActivityViewModel.getFilters().observe(this, new Observer<List<Filter>>() {
+        mActivityViewModel.getFilters().observe(getViewLifecycleOwner(), new Observer<List<Filter>>() {
             @Override
             public void onChanged(List<Filter> filters) {
                 mFilterListAdapter.setItems(filters);

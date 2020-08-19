@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    app:startDestination="@id/filterListFragment">
+
+    <fragment
+        android:id="@+id/carOwnerFragment"
+        android:name="com.ehealth4everyone.olamideadeleye.ui.car_owners_fragment.CarOwnerFragment"
+        android:label="CarOwnerFragment" />
+    <fragment
+        android:id="@+id/filterListFragment"
+        android:name="com.ehealth4everyone.olamideadeleye.ui.filters_fragment.FilterListFragment"
+        android:label="FilterListFragment" >
+        <action
+            android:id="@+id/action_filterListFragment_to_carOwnerFragment"
+            app:destination="@id/carOwnerFragment" />
+    </fragment>
+</navigation>

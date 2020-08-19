@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ehealth4everyone.olamideadeleye.R;
 import com.ehealth4everyone.olamideadeleye.databinding.FilterItemListBinding;
 import com.ehealth4everyone.olamideadeleye.models.Filter;
 import com.ehealth4everyone.olamideadeleye.util.StringUtil;
@@ -19,31 +21,22 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
     FilterItemListBinding mBinding;
     LayoutInflater mInflater;
     List<Filter> mFilters;
-    FilterItemClickHandler mClickHandler;
 
-    public FilterListAdapter(Context context, FilterItemClickHandler clickHandler) {
+    public FilterListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
-        mClickHandler = clickHandler;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mBinding = FilterItemListBinding.inflate(mInflater, parent, false);
-        return new ViewHolder(mBinding, mClickHandler);
+        return new ViewHolder(mBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final Filter filter = mFilters.get(position);
         holder.bind(filter);
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {;
-                holder.handleOnClick(filter);
-            }
-        });
     }
 
     @Override
@@ -57,12 +50,10 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         FilterItemListBinding mBinding;
-        FilterItemClickHandler mClickHandler;
 
-        public ViewHolder(FilterItemListBinding binding, FilterItemClickHandler clickHandler) {
+        public ViewHolder(FilterItemListBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
-            mClickHandler = clickHandler;
         }
 
         void bind(Filter filter) {
@@ -71,12 +62,17 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
             this.mBinding.tvGender.setText(StringUtil.formatGender(filter.getGender()));
             this.mBinding.tvCountries.setText(StringUtil.formatCountries(filter.getCountries()));
             this.mBinding.tvColor.setText(StringUtil.formatColors(filter.getColors()));
-        }
 
-        public void handleOnClick(Filter filter) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(Filter.TAG, filter);
-            this.mClickHandler.openCarOwnerFragment(bundle);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(Filter.TAG, filter);
+                    final View.OnClickListener navigateOnClickListener =
+                            Navigation.createNavigateOnClickListener(R.id.action_filterListFragment_to_carOwnerFragment, bundle);
+                    navigateOnClickListener.onClick(view);
+                }
+            });
         }
     }
 }
