@@ -35,7 +35,7 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void getCarOwnersFromRepo() {
-        mainLoadStateLiveData.postValue(true);
+        mainLoadStateLiveData.postValue(false);
         //switch to a background thread
         final Scheduler scheduler = Schedulers.newThread();
         mDisposable.add(scheduler.scheduleDirect(new Runnable() {
@@ -48,7 +48,7 @@ public class MainActivityViewModel extends ViewModel {
                         .subscribe(new Consumer<List<CarOwner>>() {
                             @Override
                             public void accept(List<CarOwner> carOwners) throws Exception {
-                                mainLoadStateLiveData.postValue(false);
+                                mainLoadStateLiveData.postValue(true);
                                 mCarOwnersLiveData.postValue(carOwners);
                             }
                         }, new Consumer<Throwable>() {
@@ -159,11 +159,19 @@ public class MainActivityViewModel extends ViewModel {
         return mFilterLiveData;
     }
 
-    public LiveData<Boolean> getMainLoadState() { return mainLoadStateLiveData;}
+    public LiveData<Boolean> getMainLoadState() {
+        return mainLoadStateLiveData;
+    }
 
-    public LiveData<List<CarOwner>> getCarOwners() { return mCarOwnersLiveData;}
+    public LiveData<List<CarOwner>> getCarOwners() {
+        return mCarOwnersLiveData;
+    }
 
-    public LiveData<Boolean> getCarOwnersLoadState() { return carOwnersLoadStateLiveData;}
+    public LiveData<Boolean> getCarOwnersLoadState() {
+        return carOwnersLoadStateLiveData;
+    }
 
-    public LiveData<List<CarOwner>> getFilteredCarOwners() { return mFilteredCarOwnersLiveData;}
+    public LiveData<List<CarOwner>> getFilteredCarOwners() {
+        return mFilteredCarOwnersLiveData;
+    }
 }

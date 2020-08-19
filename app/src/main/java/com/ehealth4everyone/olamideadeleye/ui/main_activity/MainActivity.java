@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.ehealth4everyone.olamideadeleye.App;
 import com.ehealth4everyone.olamideadeleye.R;
@@ -22,6 +21,8 @@ import javax.inject.Inject;
 public class MainActivity extends AppCompatActivity implements FilterItemClickHandler {
 
     @Inject MainActivityViewModelFactory mViewModelFactory;
+    private ProgressBar mProgressBar;
+    private MainActivityViewModel mMainActivityViewModel;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -31,29 +32,15 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
         App app = (App) getApplication();
         AppComponent appComponent = app.mAppComponent;
         appComponent.injectMainActivity(this);
+        mProgressBar = findViewById(R.id.progress_circular);
 
-        final ProgressBar progressBar = findViewById(R.id.progress_circular);
-
-        MainActivityViewModel mainActivityViewModel = new ViewModelProvider(this, mViewModelFactory)
+        mMainActivityViewModel = new ViewModelProvider(this, mViewModelFactory)
                 .get(MainActivityViewModel.class);
         if (savedInstanceState == null) {
-            mainActivityViewModel.getCarOwnersFromRepo();
-            mainActivityViewModel.getFiltersFromRepo();
+            mMainActivityViewModel.getFiltersFromRepo();
+            mMainActivityViewModel.getCarOwnersFromRepo();
+            openFilterListFragment();
         }
-        mainActivityViewModel.getMainLoadState().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    Toast.makeText(MainActivity.this, "Loading Data", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.VISIBLE);
-                } else {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    if (savedInstanceState == null) {
-                        openFilterListFragment();
-                    }
-                }
-            }
-        });
     }
 
     private void openFilterListFragment() {
@@ -65,11 +52,22 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
 
     @Override
     public void openCarOwnerFragment(Bundle bundle) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        CarOwnerFragment carOwnerFragment = new CarOwnerFragment();
-        carOwnerFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.fragment_container, carOwnerFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        mMainActivityViewModel.getMainLoadState().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    CarOwnerFragment carOwnerFragment = new CarOwnerFragment();
+                    carOwnerFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.fragment_container, carOwnerFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                } else {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
     }
 }
