@@ -28,7 +28,6 @@ public class CarOwnerFragment extends Fragment {
     @Inject CarOwnerAdapter mCarOwnerAdapter;
     private FragmentCarOwnerBinding mBinding;
     private RecyclerView mRecyclerView;
-    private List<CarOwner> mCarOwners;
 
 
     @Nullable
@@ -54,22 +53,35 @@ public class CarOwnerFragment extends Fragment {
 
             MainActivityViewModel mainActivityViewModel = new ViewModelProvider(requireActivity())
                     .get(MainActivityViewModel.class);
-            mainActivityViewModel.getCarOwners().observe(getActivity(), new Observer<List<CarOwner>>() {
+
+            //Check the load status of the car owners data from the repo
+            mainActivityViewModel.getIsCarOwnersLoaded().observe(getActivity(), new Observer<Boolean>() {
                 @Override
-                public void onChanged(List<CarOwner> carOwners) {
-                    mCarOwners = carOwners;
-                }
-            });
-            mainActivityViewModel.updateFilteredCarOwnersList(mCarOwners, filter);
-            mainActivityViewModel.getCarOwnersLoadState().observe(this, new Observer<Boolean>() {
-                @Override
-                public void onChanged(Boolean aBoolean) {
-                    if (aBoolean) {
+                public void onChanged(Boolean isLoaded) {
+                    if (isLoaded) {
+                        //Only filter the car owners list if it has been loaded from the repo
+                        mainActivityViewModel.getCarOwners().observe(getActivity(), new Observer<List<CarOwner>>() {
+                            @Override
+                            public void onChanged(List<CarOwner> carOwners) {
+                                mainActivityViewModel.updateFilteredCarOwnersList(carOwners, filter);
+                            }
+                        });
+                    }
+                    else {
                         mBinding.tvCarOwnerFragmentTitle.setVisibility(View.INVISIBLE);
                         mBinding.progressCircular.setVisibility(View.VISIBLE);
-                    } else {
+                    }
+                }
+            });
+            mainActivityViewModel.getIsCarOwnersFiltered().observe(this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean isFiltered) {
+                    if (isFiltered) {
                         mBinding.progressCircular.setVisibility(View.INVISIBLE);
                         mBinding.tvCarOwnerFragmentTitle.setVisibility(View.VISIBLE);
+                    } else {
+                        mBinding.tvCarOwnerFragmentTitle.setVisibility(View.INVISIBLE);
+                        mBinding.progressCircular.setVisibility(View.VISIBLE);
                     }
                 }
             });

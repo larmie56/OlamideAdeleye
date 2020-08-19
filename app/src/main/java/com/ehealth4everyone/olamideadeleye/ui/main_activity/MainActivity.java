@@ -2,7 +2,6 @@ package com.ehealth4everyone.olamideadeleye.ui.main_activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -26,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        //Clear the splash screen and set the theme to the AppTheme
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -52,22 +53,13 @@ public class MainActivity extends AppCompatActivity implements FilterItemClickHa
 
     @Override
     public void openCarOwnerFragment(Bundle bundle) {
-        mMainActivityViewModel.getMainLoadState().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    mProgressBar.setVisibility(View.INVISIBLE);
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    CarOwnerFragment carOwnerFragment = new CarOwnerFragment();
-                    carOwnerFragment.setArguments(bundle);
-                    fragmentTransaction.replace(R.id.fragment_container, carOwnerFragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                } else {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+        mProgressBar.setVisibility(View.INVISIBLE);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        CarOwnerFragment carOwnerFragment = new CarOwnerFragment();
+        carOwnerFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fragment_container, carOwnerFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
     }
 }

@@ -25,8 +25,8 @@ public class MainActivityViewModel extends ViewModel {
     private CompositeDisposable mDisposable = new CompositeDisposable();
     private MutableLiveData<List<CarOwner>> mFilteredCarOwnersLiveData = new MutableLiveData<>();
     private MutableLiveData<List<CarOwner>> mCarOwnersLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> mainLoadStateLiveData = new MutableLiveData<>();
-    private MutableLiveData<Boolean> carOwnersLoadStateLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isCarOwnersLoaded = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isCarOwnersFiltered = new MutableLiveData<>();
     private MutableLiveData<List<Filter>> mFilterLiveData = new MutableLiveData<>();
 
     public MainActivityViewModel(CarOwnerRepo carOwnerRepo, FilterRepo filterRepo) {
@@ -35,7 +35,7 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void getCarOwnersFromRepo() {
-        mainLoadStateLiveData.postValue(false);
+        isCarOwnersLoaded.postValue(false);
         //switch to a background thread
         final Scheduler scheduler = Schedulers.newThread();
         mDisposable.add(scheduler.scheduleDirect(new Runnable() {
@@ -48,7 +48,7 @@ public class MainActivityViewModel extends ViewModel {
                         .subscribe(new Consumer<List<CarOwner>>() {
                             @Override
                             public void accept(List<CarOwner> carOwners) throws Exception {
-                                mainLoadStateLiveData.postValue(true);
+                                isCarOwnersLoaded.postValue(true);
                                 mCarOwnersLiveData.postValue(carOwners);
                             }
                         }, new Consumer<Throwable>() {
@@ -139,10 +139,9 @@ public class MainActivityViewModel extends ViewModel {
             @Override
             public void run() {
                 //show progress bar to indicate loading
-                carOwnersLoadStateLiveData.postValue(true);
                 List<CarOwner> filteredCarOwners = filterCarOwnersList(carOwners, selectedFilter);
                 //load complete hide progress bar
-                carOwnersLoadStateLiveData.postValue(false);
+                isCarOwnersFiltered.postValue(true);
                 mFilteredCarOwnersLiveData.postValue(filteredCarOwners);
             }
         }));
@@ -159,16 +158,16 @@ public class MainActivityViewModel extends ViewModel {
         return mFilterLiveData;
     }
 
-    public LiveData<Boolean> getMainLoadState() {
-        return mainLoadStateLiveData;
+    public LiveData<Boolean> getIsCarOwnersLoaded() {
+        return isCarOwnersLoaded;
     }
 
     public LiveData<List<CarOwner>> getCarOwners() {
         return mCarOwnersLiveData;
     }
 
-    public LiveData<Boolean> getCarOwnersLoadState() {
-        return carOwnersLoadStateLiveData;
+    public LiveData<Boolean> getIsCarOwnersFiltered() {
+        return isCarOwnersFiltered;
     }
 
     public LiveData<List<CarOwner>> getFilteredCarOwners() {
