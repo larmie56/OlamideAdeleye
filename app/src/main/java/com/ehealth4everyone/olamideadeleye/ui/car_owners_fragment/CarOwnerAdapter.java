@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ehealth4everyone.olamideadeleye.models.CarOwner;
@@ -36,7 +37,6 @@ public class CarOwnerAdapter extends RecyclerView.Adapter<CarOwnerAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CarOwner carOwner = mCarOwners.get(position);
-
         holder.bind(carOwner);
     }
 
@@ -46,6 +46,10 @@ public class CarOwnerAdapter extends RecyclerView.Adapter<CarOwnerAdapter.ViewHo
     }
 
     public void setItems(List<CarOwner> carOwners) {
+        if (mCarOwners != null) {
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new CarOwnersAdapterDiffUtil(mCarOwners, carOwners));
+            diffResult.dispatchUpdatesTo(this);
+        }
         mCarOwners = carOwners;
     }
 
