@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
@@ -15,6 +16,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#ce93d8"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.Guideline
@@ -31,14 +33,30 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="16dp"/>
 
+        <ImageView
+            android:id="@+id/car_owner_filter"
+            android:layout_width="64dp"
+            android:layout_height="78dp"
+            android:tint="@android:color/white"
+            android:src="@drawable/ic_car_owner_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toStartOf="@id/tv_fullName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="@string/car_owner_icon"
+            tools:ignore="UseAppTint" />
+
+
         <TextView
             android:id="@+id/tv_fullName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/placeholder"
             android:layout_marginTop="4dp"
+            android:layout_marginStart="4dp"
+            android:textColor="@android:color/white"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintStart_toEndOf="@id/car_owner_filter"
             app:layout_constraintEnd_toEndOf="@id/guideline_end"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -49,7 +67,8 @@
             android:text="@string/placeholder"
             android:layout_marginTop="4dp"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="@id/tv_fullName"
             app:layout_constraintEnd_toEndOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@+id/tv_fullName"/>
 
@@ -60,7 +79,8 @@
             android:text="@string/placeholder"
             android:layout_marginTop="4dp"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="@id/tv_fullName"
             app:layout_constraintEnd_toEndOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@+id/tv_email"/>
 
@@ -71,7 +91,8 @@
             android:text="@string/placeholder"
             android:layout_marginTop="4dp"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="@id/tv_fullName"
             app:layout_constraintEnd_toEndOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@+id/tv_country"/>
 
@@ -82,7 +103,8 @@
             android:text="@string/placeholder"
             android:layout_marginTop="4dp"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="@id/tv_fullName"
             app:layout_constraintEnd_toEndOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@+id/tv_carMake_color_year"/>
 
@@ -93,7 +115,8 @@
             android:text="@string/placeholder"
             android:layout_marginTop="4dp"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="@id/tv_fullName"
             app:layout_constraintEnd_toEndOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@+id/tv_gender"/>
 
@@ -104,7 +127,8 @@
             android:text="@string/placeholder"
             android:layout_marginTop="4dp"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="@id/tv_fullName"
             app:layout_constraintEnd_toEndOf="@id/guideline_end"
             app:layout_constraintTop_toBottomOf="@+id/tv_jobTitle"/>
 

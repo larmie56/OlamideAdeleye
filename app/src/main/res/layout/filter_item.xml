@@ -15,6 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#ce93d8"
         android:orientation="vertical">
 
     <androidx.constraintlayout.widget.Guideline
@@ -31,15 +32,28 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp"/>
 
+    <ImageView
+        android:id="@+id/filter_icon"
+        android:layout_width="64dp"
+        android:layout_height="78dp"
+        android:src="@drawable/ic_filter_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@id/tv_dateRange"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/filter_icon"
+        app:tint="@android:color/white" />
+
     <TextView
         android:id="@+id/tv_dateRange"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/placeholder"
         android:layout_marginTop="4dp"
+        android:layout_marginStart="4dp"
         android:padding="4dp"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintStart_toEndOf="@id/filter_icon"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -51,7 +65,7 @@
         android:padding="4dp"
         android:layout_marginTop="4dp"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintStart_toStartOf="@id/tv_dateRange"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintTop_toBottomOf="@+id/tv_dateRange"/>
 
@@ -63,7 +77,7 @@
         android:padding="4dp"
         android:layout_marginTop="4dp"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintStart_toStartOf="@id/tv_dateRange"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintTop_toBottomOf="@+id/tv_gender"/>
 
@@ -75,7 +89,7 @@
         android:padding="4dp"
         android:layout_marginTop="4dp"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintStart_toStartOf="@id/tv_dateRange"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintTop_toBottomOf="@+id/tv_countries"/>
 

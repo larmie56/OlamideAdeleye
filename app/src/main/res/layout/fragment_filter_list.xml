@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:listitem="@layout/filter_item_list" />
+            tools:listitem="@layout/filter_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -17,14 +17,12 @@ import javax.inject.Inject;
 
 public class CarOwnerAdapter extends RecyclerView.Adapter<CarOwnerAdapter.ViewHolder> {
 
-    CarOwnerItemBinding mBinding;
-    Context mContext;
-    LayoutInflater mInflater;
-    List<CarOwner> mCarOwners;
+    private CarOwnerItemBinding mBinding;
+    private LayoutInflater mInflater;
+    private List<CarOwner> mCarOwners;
 
     @Inject
     public CarOwnerAdapter(Context context) {
-        mContext = context;
         mInflater = LayoutInflater.from(context);
     }
 

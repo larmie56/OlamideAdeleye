@@ -42,4 +42,10 @@ public class MainActivity extends AppCompatActivity{
             mainActivityViewModel.getCarOwnersFromRepo();
         }
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp()
+                || super.onSupportNavigateUp();
+    }
 }

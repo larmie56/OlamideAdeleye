@@ -11,7 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ehealth4everyone.olamideadeleye.R;
-import com.ehealth4everyone.olamideadeleye.databinding.FilterItemListBinding;
+import com.ehealth4everyone.olamideadeleye.databinding.FilterItemBinding;
 import com.ehealth4everyone.olamideadeleye.models.Filter;
 import com.ehealth4everyone.olamideadeleye.util.StringUtil;
 
@@ -20,9 +20,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.ViewHolder> {
-    FilterItemListBinding mBinding;
-    LayoutInflater mInflater;
-    List<Filter> mFilters;
+    private FilterItemBinding mBinding;
+    private LayoutInflater mInflater;
+    private List<Filter> mFilters;
 
     @Inject
     public FilterListAdapter(Context context) {
@@ -32,7 +32,7 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        mBinding = FilterItemListBinding.inflate(mInflater, parent, false);
+        mBinding = FilterItemBinding.inflate(mInflater, parent, false);
         return new ViewHolder(mBinding);
     }
 
@@ -52,11 +52,11 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        FilterItemListBinding mBinding;
+        private FilterItemBinding mBinding;
 
-        public ViewHolder(FilterItemListBinding binding) {
+        public ViewHolder(FilterItemBinding binding) {
             super(binding.getRoot());
-            mBinding = binding;
+            this.mBinding = binding;
         }
 
         void bind(Filter filter) {
