@@ -12,4 +12,5 @@ public interface AppComponent {
 
     void injectMainActivity(MainActivity mainActivity);
     CarOwnerComponent plusCarOwnerFragment();
+    FilterListComponent plusFilterListFragment();
 }

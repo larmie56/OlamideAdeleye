@@ -17,11 +17,14 @@ import com.ehealth4everyone.olamideadeleye.util.StringUtil;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.ViewHolder> {
     FilterItemListBinding mBinding;
     LayoutInflater mInflater;
     List<Filter> mFilters;
 
+    @Inject
     public FilterListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }

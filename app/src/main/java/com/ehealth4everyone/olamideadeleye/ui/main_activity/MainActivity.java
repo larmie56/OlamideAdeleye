@@ -2,6 +2,11 @@ package com.ehealth4everyone.olamideadeleye.ui.main_activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavHost;
+import androidx.navigation.NavHostController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 
@@ -26,6 +31,9 @@ public class MainActivity extends AppCompatActivity{
         AppComponent appComponent = app.mAppComponent;
         appComponent.injectMainActivity(this);
 
+        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController);
+
         MainActivityViewModel mainActivityViewModel = new ViewModelProvider(this, mViewModelFactory)
                 .get(MainActivityViewModel.class);
 
@@ -34,5 +42,4 @@ public class MainActivity extends AppCompatActivity{
             mainActivityViewModel.getCarOwnersFromRepo();
         }
     }
-
 }

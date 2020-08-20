@@ -71,7 +71,7 @@ public class MainActivityViewModelTest {
         mainActivityViewModel = new MainActivityViewModel(mCarOwnerRepo, mFilterRepo);
     }
     @Test
-    public void getFiltersFromRepo_getsCorrectData_fromRepo() {
+    public void verify_getFiltersFromRepo_getsCorrectData_fromRepo() {
         List<Filter> filters = mTestDataFactory.getFilters();
 
         when(mFilterRepo.getJsonStringFromAsset()).thenReturn("");
@@ -92,7 +92,7 @@ public class MainActivityViewModelTest {
     }
 
     @Test
-    public void getCarOwnersFromRepo_getsCorrectData_fromRepo() {
+    public void verify_getCarOwnersFromRepo_getsCorrectData_fromRepo() {
         List<CarOwner> carOwners = mTestDataFactory.getCarOwners();
         when(mCarOwnerRepo.getCarOwnersFromAsset()).thenReturn(Single.just(carOwners));
 
@@ -112,7 +112,7 @@ public class MainActivityViewModelTest {
     }
 
     @Test
-    public void getFilteredCarOwnersList_getsCorrectFilteredCarOwnersList() {
+    public void verify_getFilteredCarOwnersList_getsCorrectFilteredCarOwnersList() {
         List<CarOwner> carOwners = mTestDataFactory.getCarOwners();
         Filter selectedFilter = mTestDataFactory.getTest1Filter();
         List<CarOwner> expectedFilteredCarOwnersList = mTestDataFactory.getTest1FilteredCarOwners();

@@ -13,17 +13,17 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ehealth4everyone.olamideadeleye.App;
 import com.ehealth4everyone.olamideadeleye.databinding.FragmentFilterListBinding;
 import com.ehealth4everyone.olamideadeleye.models.Filter;
 import com.ehealth4everyone.olamideadeleye.ui.main_activity.MainActivityViewModel;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class FilterListFragment extends Fragment {
-    public String TAG = this.getClass().getSimpleName();
-
-    FilterListAdapter mFilterListAdapter;
-
+    @Inject FilterListAdapter mFilterListAdapter;
     FragmentFilterListBinding mFilterListBinding;
     MainActivityViewModel mActivityViewModel;
     private RecyclerView mRecyclerView;
@@ -37,8 +37,10 @@ public class FilterListFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        App app = (App) getActivity().getApplication();
+        app.mAppComponent.plusFilterListFragment().injectFilterListFragment(this);
+
         mRecyclerView = mFilterListBinding.filterListRv;
-        mFilterListBinding.tvFilterFragmentTitle.setText("Filters");
         mFilterListAdapter = new FilterListAdapter(getActivity());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -48,9 +50,16 @@ public class FilterListFragment extends Fragment {
             @Override
             public void onChanged(List<Filter> filters) {
                 mFilterListAdapter.setItems(filters);
-                mRecyclerView.setAdapter(mFilterListAdapter);
+                mFilterListAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
+                if (mRecyclerView.getAdapter() != mFilterListAdapter) {
+                    mRecyclerView.setAdapter(mFilterListAdapter);
+                }
             }
         });
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }
