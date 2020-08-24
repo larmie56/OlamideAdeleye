@@ -1,16 +1,16 @@
 package com.ehealth4everyone.olamideadeleye.di;
 
-import com.ehealth4everyone.olamideadeleye.main_activity.MainActivity;
+import com.ehealth4everyone.olamideadeleye.ui.main_activity.MainActivity;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
 
 @Singleton
-@Component(modules = {AppModule.class})
+@Component(modules = {AppModule.class, MainActivityBinders.class})
 public interface AppComponent {
 
     void injectMainActivity(MainActivity mainActivity);
-    FilterListComponent plusFilterListFragment();
     CarOwnerComponent plusCarOwnerFragment();
+    FilterListComponent plusFilterListFragment();
 }

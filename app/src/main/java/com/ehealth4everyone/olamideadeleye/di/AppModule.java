@@ -3,12 +3,8 @@ package com.ehealth4everyone.olamideadeleye.di;
 import android.app.Application;
 import android.content.Context;
 
-import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepo;
-import com.ehealth4everyone.olamideadeleye.repo.CarOwnerRepoImpl;
-
 import javax.inject.Singleton;
 
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
@@ -25,11 +21,5 @@ public class AppModule {
     @Singleton
     public Context providesContext() {
         return mApplication;
-    }
-
-    @Provides
-    @Singleton
-    public CarOwnerRepoImpl providesCarOwnerRepo() {
-        return new CarOwnerRepoImpl(mApplication);
     }
 }

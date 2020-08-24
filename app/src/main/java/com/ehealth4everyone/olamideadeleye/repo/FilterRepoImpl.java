@@ -3,7 +3,7 @@ package com.ehealth4everyone.olamideadeleye.repo;
 import android.content.Context;
 import android.util.Log;
 
-import com.ehealth4everyone.olamideadeleye.filter_model.Filter;
+import com.ehealth4everyone.olamideadeleye.models.Filter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,11 +29,11 @@ public class FilterRepoImpl implements FilterRepo {
     }
 
     @Override
-    public String getJsonStringFromAsset() {
+    public String getJsonStringFromAsset(String filename) {
         String json;
 
         try {
-            InputStream inputStream = mContext.getAssets().open("filter.json");
+            InputStream inputStream = mContext.getAssets().open(filename);
             int size = inputStream.available();
             byte[] buffer = new byte[size];
             inputStream.read(buffer);
