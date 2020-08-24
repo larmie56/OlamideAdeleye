@@ -1,0 +1,15 @@
+[{
+  "id": 1,
+  "start_year": 1991,
+  "end_year": 2009,
+  "gender": "male",
+  "countries": ["Brazil", "Ireland", "Egypt", "Poland", "Niger", "Greece", "Peru"],
+  "colors": ["Green", "Violet", "Yellow", "Blue"]
+}, {
+"id": 4,
+"start_year": 1990,
+"end_year": 2000,
+"gender": "",
+"countries": ["United States"],
+"colors": []
+}]

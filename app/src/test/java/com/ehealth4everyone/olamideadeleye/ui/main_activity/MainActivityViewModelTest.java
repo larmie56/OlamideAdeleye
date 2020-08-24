@@ -74,7 +74,7 @@ public class MainActivityViewModelTest {
     public void verify_getFiltersFromRepo_getsCorrectData_fromRepo() {
         List<Filter> filters = mTestDataFactory.getFilters();
 
-        when(mFilterRepo.getJsonStringFromAsset()).thenReturn("");
+        when(mFilterRepo.getJsonStringFromAsset(anyString())).thenReturn("");
         when(mFilterRepo.getFiltersFromJsonString(anyString())).thenReturn(Single.just(filters));
 
         mainActivityViewModel.getFiltersFromRepo();
@@ -94,7 +94,7 @@ public class MainActivityViewModelTest {
     @Test
     public void verify_getCarOwnersFromRepo_getsCorrectData_fromRepo() {
         List<CarOwner> carOwners = mTestDataFactory.getCarOwners();
-        when(mCarOwnerRepo.getCarOwnersFromAsset()).thenReturn(Single.just(carOwners));
+        when(mCarOwnerRepo.getCarOwnersFromAsset(anyString())).thenReturn(Single.just(carOwners));
 
         mainActivityViewModel.getCarOwnersFromRepo();
         newThreadScheduler.triggerActions();
@@ -102,7 +102,7 @@ public class MainActivityViewModelTest {
         mainTestScheduler.triggerActions();
 
         verifyZeroInteractions(mFilterRepo);
-        verify(mCarOwnerRepo).getCarOwnersFromAsset();
+        verify(mCarOwnerRepo).getCarOwnersFromAsset(anyString());
         final List<CarOwner> carOwnerFromRepo = mainActivityViewModel.getCarOwners().getValue();
         assertNotNull(carOwnerFromRepo);
         assertEquals(carOwnerFromRepo, carOwners);

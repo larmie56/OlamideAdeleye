@@ -8,5 +8,5 @@ import io.reactivex.Single;
 
 public interface CarOwnerRepo {
 
-    Single<List<CarOwner>> getCarOwnersFromAsset();
+    Single<List<CarOwner>> getCarOwnersFromAsset(String fileName);
 }

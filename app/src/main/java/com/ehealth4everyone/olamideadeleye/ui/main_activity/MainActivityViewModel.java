@@ -12,6 +12,8 @@ import com.ehealth4everyone.olamideadeleye.repo.FilterRepo;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -19,6 +21,9 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivityViewModel extends ViewModel {
+
+    private static String FILTER_FILE_NAME = "filter.json";
+    private static String CAR_OWNERS_FILE_NAME = "cars/car_ownsers_data.csv";
 
     private final CarOwnerRepo mCarOwnerRepo;
     private FilterRepo mFilterRepo;
@@ -42,7 +47,7 @@ public class MainActivityViewModel extends ViewModel {
             @Override
             public void run() {
                 //Load the car owners list from the .csv file on creation of MainActivity
-                mDisposable.add(mCarOwnerRepo.getCarOwnersFromAsset()
+                mDisposable.add(mCarOwnerRepo.getCarOwnersFromAsset(CAR_OWNERS_FILE_NAME)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Consumer<List<CarOwner>>() {
@@ -63,7 +68,7 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void getFiltersFromRepo() {
-        mDisposable.add(mFilterRepo.getFiltersFromJsonString(mFilterRepo.getJsonStringFromAsset())
+        mDisposable.add(mFilterRepo.getFiltersFromJsonString(mFilterRepo.getJsonStringFromAsset(FILTER_FILE_NAME))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Filter>>() {

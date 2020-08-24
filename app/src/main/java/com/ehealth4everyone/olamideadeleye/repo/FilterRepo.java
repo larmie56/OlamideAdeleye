@@ -8,6 +8,6 @@ import io.reactivex.Single;
 
 public interface FilterRepo {
 
-    String getJsonStringFromAsset();
+    String getJsonStringFromAsset(String fileName);
     Single<List<Filter>> getFiltersFromJsonString(String string);
 }

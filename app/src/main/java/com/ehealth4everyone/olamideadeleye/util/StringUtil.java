@@ -63,7 +63,7 @@ public class StringUtil {
         return formattedEmail + email;
     }
 
-    public static String formatountry(String country) {
+    public static String formatCountry(String country) {
         String formattedCountry = "Country: ";
 
         return formattedCountry + country;

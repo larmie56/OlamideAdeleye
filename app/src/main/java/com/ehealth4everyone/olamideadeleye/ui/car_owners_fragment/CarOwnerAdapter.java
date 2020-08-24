@@ -65,7 +65,7 @@ public class CarOwnerAdapter extends RecyclerView.Adapter<CarOwnerAdapter.ViewHo
             mBinding.tvFullName.setText(
                     StringUtil.formatFullName(carOwner.getFirstName(), carOwner.getLastName()));
             mBinding.tvEmail.setText(StringUtil.formatEmail(carOwner.getEmail()));
-            mBinding.tvCountry.setText(StringUtil.formatountry(carOwner.getCountry()));
+            mBinding.tvCountry.setText(StringUtil.formatCountry(carOwner.getCountry()));
             mBinding.tvCarMakeColorYear.setText(StringUtil.formatCarMakeColorYear(carOwner.getCarModel(), carOwner.getCarColor(), carOwner.getCarModelYear()));
             mBinding.tvGender.setText(StringUtil.formatGender(carOwner.getGender()));
             mBinding.tvJobTitle.setText(StringUtil.formatJobTitle(carOwner.getJobTitle()));

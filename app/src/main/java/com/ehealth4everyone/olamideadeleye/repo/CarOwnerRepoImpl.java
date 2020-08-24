@@ -27,11 +27,11 @@ public class CarOwnerRepoImpl implements CarOwnerRepo {
     }
 
     @Override
-    public Single<List<CarOwner>> getCarOwnersFromAsset() {
+    public Single<List<CarOwner>> getCarOwnersFromAsset(String fileName) {
         List<CarOwner> carOwners = new ArrayList<>();
 
         try {
-            InputStream inputStream = mContext.getAssets().open("cars/car_ownsers_data.csv");
+            InputStream inputStream = mContext.getAssets().open(fileName);
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             BufferedReader reader = new BufferedReader(inputStreamReader);
             CSVReader csvReader = new CSVReader(reader);

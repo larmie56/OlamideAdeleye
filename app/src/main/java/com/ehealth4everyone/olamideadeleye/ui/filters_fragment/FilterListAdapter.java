@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,8 +53,9 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
         mFilters = filters;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        private FilterItemBinding mBinding;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public FilterItemBinding mBinding;
+        public Bundle mBundle;
 
         public ViewHolder(FilterItemBinding binding) {
             super(binding.getRoot());
@@ -69,11 +72,10 @@ public class FilterListAdapter extends RecyclerView.Adapter<FilterListAdapter.Vi
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(Filter.TAG, filter);
-                    final View.OnClickListener navigateOnClickListener =
-                            Navigation.createNavigateOnClickListener(R.id.action_filterListFragment_to_carOwnerFragment, bundle);
-                    navigateOnClickListener.onClick(view);
+                    mBundle = new Bundle();
+                    mBundle.putParcelable(Filter.TAG, filter);
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(R.id.action_filterListFragment_to_carOwnerFragment, mBundle);
                 }
             });
         }

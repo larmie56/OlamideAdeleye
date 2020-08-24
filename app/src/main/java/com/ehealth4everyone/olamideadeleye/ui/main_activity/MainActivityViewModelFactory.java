@@ -14,9 +14,9 @@ import javax.inject.Provider;
 
 public class MainActivityViewModelFactory implements ViewModelProvider.Factory {
 
-    //Using providers to defer object creation to when their creation is necessary
-    Provider<CarOwnerRepo> mCarOwnerRepoProvider;
-    Provider<FilterRepo> mFilterRepoProvider;
+    //Using providers to defer object creation to when their creation is required
+    private Provider<CarOwnerRepo> mCarOwnerRepoProvider;
+    private Provider<FilterRepo> mFilterRepoProvider;
 
     @Inject
     public MainActivityViewModelFactory(Provider<CarOwnerRepo> carOwnerRepoProvider, Provider<FilterRepo> filterRepoProvider) {

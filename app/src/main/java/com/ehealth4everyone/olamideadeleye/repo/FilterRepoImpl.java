@@ -29,11 +29,11 @@ public class FilterRepoImpl implements FilterRepo {
     }
 
     @Override
-    public String getJsonStringFromAsset() {
+    public String getJsonStringFromAsset(String filename) {
         String json;
 
         try {
-            InputStream inputStream = mContext.getAssets().open("filter.json");
+            InputStream inputStream = mContext.getAssets().open(filename);
             int size = inputStream.available();
             byte[] buffer = new byte[size];
             inputStream.read(buffer);

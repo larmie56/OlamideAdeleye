@@ -7,6 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestDataFactory {
+
+    public List<Filter> simulateFiltersFromJsonString() {
+        List<Filter> testFilters = new ArrayList<>();
+        Filter testFilter1 = new Filter(1, 1991, 2009, "male", getCountries(), getColors());
+        Filter testFilter2 = new Filter(4, 1990, 2000, "", getSingleCountry(), getEmptyColors());
+        testFilters.add(testFilter1);
+        testFilters.add(testFilter2);
+
+        return testFilters;
+    }
     public Filter getTest1Filter() {
         return new Filter(1, 1991, 2001, "male", getCountries(), getColors());
     }
@@ -16,7 +26,7 @@ public class TestDataFactory {
     }
 
     public Filter getEmptyColorsFilter() {
-        return new Filter(1, 1990, 2010, "", getCountries3(), getEmptyColors());
+        return new Filter(1, 1990, 2010, "", getSingleCountry(), getEmptyColors());
     }
 
     public Filter getEmptyCountriesAndColorsFilter() {
@@ -24,7 +34,7 @@ public class TestDataFactory {
     }
 
     public Filter getEmptyCountriesFilter() {
-        return new Filter(1, 1990, 2000, "female", getEmptyCountries(), getColors5());
+        return new Filter(1, 1990, 2000, "female", getEmptyCountries(), getSingleColor());
     }
     public List<Filter> getFilters() {
         List<Filter> filters = new ArrayList<>();
@@ -108,7 +118,7 @@ public class TestDataFactory {
         return filteredList;
     }
 
-    private List<String> getCountries() {
+    public List<String> getCountries() {
         List<String> countries = new ArrayList<>();
 
         countries.add("Brazil");
@@ -122,7 +132,7 @@ public class TestDataFactory {
         return countries;
     }
 
-    private List<String> getColors() {
+    public List<String> getColors() {
         List<String> colors = new ArrayList<>();
 
         colors.add("Green");
@@ -133,22 +143,22 @@ public class TestDataFactory {
         return colors;
     }
 
-    private List<String> getCountries3() {
+    public List<String> getSingleCountry() {
         List<String> countries = new ArrayList<>();
         countries.add("United States");
         return countries;
     }
-    private List<String> getColors5() {
+    public List<String> getSingleColor() {
         List<String> colors = new ArrayList<>();
         colors.add("Aquamarine");
         return colors;
     }
 
-    private List<String> getEmptyColors() {
+    public List<String> getEmptyColors() {
         return new ArrayList<>();
     }
 
-    private List<String> getEmptyCountries() {
+    public List<String> getEmptyCountries() {
         return new ArrayList<>();
     }
 
