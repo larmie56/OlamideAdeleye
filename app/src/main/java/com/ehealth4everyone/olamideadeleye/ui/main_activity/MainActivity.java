@@ -19,23 +19,28 @@ import javax.inject.Inject;
 public class MainActivity extends AppCompatActivity{
 
     @Inject MainActivityViewModelFactory mViewModelFactory;
+    AppFragmentFactory mFragmentFactory;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         //Clear the splash screen and set the theme to the AppTheme
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         App app = (App) getApplication();
         AppComponent appComponent = app.mAppComponent;
         appComponent.injectMainActivity(this);
 
-        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController);
-
         MainActivityViewModel mainActivityViewModel = new ViewModelProvider(this, mViewModelFactory)
                 .get(MainActivityViewModel.class);
+
+        //Use a fragment factory to initialize the fragments with the same instance of MainActivityViewModel
+        mFragmentFactory = new AppFragmentFactory(mainActivityViewModel);
+        getSupportFragmentManager().setFragmentFactory(mFragmentFactory);
+        setContentView(R.layout.activity_main);
+
+        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController);
 
         if (savedInstanceState == null) {
             mainActivityViewModel.getFiltersFromRepo();

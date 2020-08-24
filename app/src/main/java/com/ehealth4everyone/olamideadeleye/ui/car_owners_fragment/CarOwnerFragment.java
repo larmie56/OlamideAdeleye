@@ -8,9 +8,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,8 +26,14 @@ import javax.inject.Inject;
 
 public class CarOwnerFragment extends Fragment {
     @Inject CarOwnerAdapter mCarOwnerAdapter;
+    private MainActivityViewModel mMainActivityViewModel;
     private FragmentCarOwnerBinding mBinding;
+    @VisibleForTesting
     private RecyclerView mRecyclerView;
+
+    public CarOwnerFragment(MainActivityViewModel mainActivityViewModel) {
+        mMainActivityViewModel = mainActivityViewModel;
+    }
 
 
     @Nullable
@@ -49,19 +55,16 @@ public class CarOwnerFragment extends Fragment {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(linearLayoutManager);
 
-            MainActivityViewModel mainActivityViewModel = new ViewModelProvider(requireActivity())
-                    .get(MainActivityViewModel.class);
-
             //Check the load status of the car owners data from the repo
-            mainActivityViewModel.getIsCarOwnersLoaded().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            mMainActivityViewModel.getIsCarOwnersLoaded().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean isLoaded) {
                     if (isLoaded) {
                         //Only filter the car owners list if it has been loaded from the repo
-                        mainActivityViewModel.getCarOwners().observe(getViewLifecycleOwner(), new Observer<List<CarOwner>>() {
+                        mMainActivityViewModel.getCarOwners().observe(getViewLifecycleOwner(), new Observer<List<CarOwner>>() {
                             @Override
                             public void onChanged(List<CarOwner> carOwners) {
-                                mainActivityViewModel.updateFilteredCarOwnersList(carOwners, filter);
+                                mMainActivityViewModel.updateFilteredCarOwnersList(carOwners, filter);
                             }
                         });
                     } else {
@@ -69,7 +72,7 @@ public class CarOwnerFragment extends Fragment {
                     }
                 }
             });
-            mainActivityViewModel.getIsCarOwnersFiltered().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            mMainActivityViewModel.getIsCarOwnersFiltered().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean isFiltered) {
                     if (isFiltered) {
@@ -79,7 +82,7 @@ public class CarOwnerFragment extends Fragment {
                     }
                 }
             });
-            mainActivityViewModel.getFilteredCarOwners().observe(getViewLifecycleOwner(), new Observer<List<CarOwner>>() {
+            mMainActivityViewModel.getFilteredCarOwners().observe(getViewLifecycleOwner(), new Observer<List<CarOwner>>() {
                 @Override
                 public void onChanged(List<CarOwner> carOwners) {
                     if (carOwners.isEmpty()) {

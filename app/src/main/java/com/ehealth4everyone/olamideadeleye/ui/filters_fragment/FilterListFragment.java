@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,9 +23,13 @@ import javax.inject.Inject;
 
 public class FilterListFragment extends Fragment {
     @Inject FilterListAdapter mFilterListAdapter;
-    FragmentFilterListBinding mFilterListBinding;
-    MainActivityViewModel mActivityViewModel;
-    private RecyclerView mRecyclerView;
+    private FragmentFilterListBinding mFilterListBinding;
+    private MainActivityViewModel mMainActivityViewModel;
+    public RecyclerView mRecyclerView;
+
+    public FilterListFragment(MainActivityViewModel viewModel) {
+        mMainActivityViewModel = viewModel;
+    }
 
     @Nullable
     @Override
@@ -45,8 +48,7 @@ public class FilterListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mActivityViewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-        mActivityViewModel.getFilters().observe(getViewLifecycleOwner(), new Observer<List<Filter>>() {
+        mMainActivityViewModel.getFilters().observe(getViewLifecycleOwner(), new Observer<List<Filter>>() {
             @Override
             public void onChanged(List<Filter> filters) {
                 mFilterListAdapter.setItems(filters);
@@ -56,10 +58,5 @@ public class FilterListFragment extends Fragment {
                 }
             }
         });
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
+   }
 }
